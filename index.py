@@ -9,7 +9,6 @@ from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 import moviepy.editor as moviepy
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
-from d import split_by_seconds
 def make_link(duuni1):
     url = "https://cloud.elokapina.fi/ocs/v2.php/apps/files_sharing/api/v1/shares"
     payload=f'path=ilmo_{duuni1}.xlsx&shareType=3'
