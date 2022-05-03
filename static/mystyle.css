@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'FucXed';
+    /* Upload fonts on your own server and replace urls with your own. */
+    src: url(FUCXEDCAPSLatin-Regular.woff) format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+	font-family: "FucXed", sans-serif;
+	text-transform: uppercase;
+    text-align: center;
+    color: white
+}
+.button {
+    background-color: #eb7ac4;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.entry {
+    background-color: white;
+    display: inline-block;
+    padding: 15px 32px;
+    color: white;
+}
+body {
+    background-color: #c80082;
+}
