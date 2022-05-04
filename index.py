@@ -42,7 +42,7 @@ def onetime_verify(language, client):
 		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/verify/se, niin voit ladata videon palvelimelle. Koodi on {totp}.")
 	return render_template(f"{language}/verify.html")
 @app.route("/verify_final/<language>", methods=["POST"])
-def onetime_verify(language, client):
+def onetime_verify1(language, client):
 	element = request.form.get("element")
 	otp = request.form.get("totp_send")
 	f = open(f"{element}_otp.txt", "r")
