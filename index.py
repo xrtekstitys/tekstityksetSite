@@ -29,9 +29,9 @@ def redi():
 @app.route("/verify/<language>/", methods=["POST"])
 def onetime_verify(language):
 	element = request.form.get("element")
-	matrix_token = "syt_dGVrc3RpdHlrc2V0_ktlhkvqpXHHbSTnKgLtD_4gd6M0"
+	matrix_token = ""
 	matrix = MatrixHttpApi("https://matrix.elokapina.fi", token=matrix_token)
-	if element in matrix_map:
+	if hash(element) in matrix_map:
 		# Avaa dictionaryn paikalliseen tiedostopolkuun
 		with open('./cant.pickle', 'br') as file:
 			matrix_map = pickle.load(file)
