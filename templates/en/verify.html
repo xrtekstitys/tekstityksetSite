@@ -1,0 +1,21 @@
+<!doctype html>
+<link rel="icon" type="image/png" sizes="32x32" href="https://elokapina.fi/favicon.png">
+<head>
+<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}"/> 
+<title>Tekstitykset</title>
+</head>
+<form method="post" action="/verify_final/en/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="text" class="entry" id="element" name="element" placeholder="Element käyttäjänimi" required>			
+		</p>
+		<p>
+			<label for="totp_send">Verify code</label>
+			<br>
+			<input type="text" class="entry" id="totp_send" name="totp_send" placeholder="Verify code" required minlength="6" maxlength="6">		
+		</p>
+    </dl>
+    <p>
+		<input type="submit" class="button" value="Verify">
+	</p>
+</form>
