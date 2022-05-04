@@ -1,14 +1,16 @@
 import os
-import xml.etree.ElementTree as ET
-from app import app
-from matrix_client.client import MatrixClient
-import nextcloud_client
+import time
 import urllib.request
-import requests
-from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
+import xml.etree.ElementTree as ET
 import moviepy.editor as moviepy
-from flask import Flask, flash, request, redirect, url_for, render_template
+import nextcloud_client
+import pyotp
+import requests
+from flask import Flask, flash, redirect, render_template, request, url_for
+from matrix_client.client import MatrixClient
+from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from werkzeug.utils import secure_filename
+from app import app
 def make_link(duuni1):
     url = "https://cloud.elokapina.fi/ocs/v2.php/apps/files_sharing/api/v1/shares"
     payload=f'path=ilmo_{duuni1}.xlsx&shareType=3'
@@ -38,6 +40,37 @@ def make_link(duuni1):
 			}
     response = requests.request("PUT", url, headers=headers, data=payload)
     return re2
+def create_dm(element):
+	client = MatrixClient("https://matrix.elokapina.fi", token="", user_id="")
+	room = client.create_room()
+	room.set_name(f"{element}")
+	room.invite_user(element)
+	onetime(element, room)
+def onetime(language, element, room):
+	file_exists = os.path.exists(f'{element}.txt')
+	if file_exists == "False":
+		secret = pyotp.random_base32()
+		f = open(f"{element}.txt", "w")
+		f.write(secret)
+		f.close()
+	elif file_exists == "True":
+		f = open(f"{element}.txt", "r")
+		secret = f.read()
+		f.close()    
+	totp = pyotp.TOTP(secret)
+	totp = totp.now()
+	f = open(f"{element}_otp.txt", "w")
+	f.write(totp)
+	f.close()
+	if language == "fi":
+		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/fi/verify/{element}, niin videosi teksittäminen alkaa. Koodi on {totp}.")
+		onetime_show(language)
+	elif language == "en":
+		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/en/verify/{element}, niin videosi teksittäminen alkaa. Koodi on {totp}.")
+		onetime_show(language)
+	elif language == "se":
+		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/se/verify/{element}, niin videosi teksittäminen alkaa. Koodi on {totp}.")
+		onetime_show(language)
 @app.route('/<language>')
 def redirect(language):
 	if language == "fi":
@@ -49,6 +82,21 @@ def redirect(language):
 @app.route("/")
 def redi():
 	return render_template('select.html')
+@app.route("/<language>/verify/<username>")
+def onetime_show(language):
+	return render_template(f'/{language}/verify.html')
+@app.route("/<language>/verify/", methods=["POST"])
+def onetime_verify(language):
+	element = request.form.get("element")
+	totp = request.form.get("totp_send")
+	f = open(f"{element}_otp.txt", "r")
+	otp = f.read()
+	f.close()
+	if totp == otp:
+		return render_template(f'{language}/verifed.html')
+	else:
+		return render_template(f'{language}/unverifed.html')
+
 @app.route("/<language>", methods=["POST"])
 def upload(language):
 	if 'file' not in request.files:
