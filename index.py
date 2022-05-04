@@ -43,7 +43,7 @@ def make_link(duuni1):
 def create_dm(element):
 	client = MatrixClient("https://matrix.elokapina.fi", token="", user_id="")
 	room = client.create_room()
-	room.set_name(f"{element}")
+	# TODO ETSI OIKEA KOMENTO room.set_name(f"{element}")
 	room.invite_user(element)
 	onetime(element, room)
 def onetime(language, element, room):
