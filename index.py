@@ -46,7 +46,7 @@ def onetime_verify(language):
 		MatrixHttpApi.invite_user(matrix, room1, element)
 		matrix_map = dict()
 		matrix_map[hash(element)] = room1
-		with open('./dont.pickle', 'bw') as file:
+		with open('./cant.pickle', 'bw') as file:
 			pickle.dump(matrix_map, file)
 	secret = pyotp.random_base32()
 	totp = pyotp.TOTP(secret)
