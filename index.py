@@ -54,7 +54,7 @@ def onetime_verify1(language):
 	totp = f.read()
 	f.close()
 	f = open(f"{element}_otp.txt", "w")
-	f.write()
+	f.write("")
 	f.close()
 	if otp == totp:
 		return render_template(f'{language}/index.html')
@@ -128,8 +128,8 @@ def upload(language):
 				'Cookie': 'cookie_test=test; __Host-nc_sameSiteCookielax=true; __Host-nc_sameSiteCookiestrict=true; oc8ap6e5iwyr=ffsifjkob3rqr9m7po5lb2urs1; oc_sessionPassphrase=1NYvqCIVcMtskFV625bXbpz8WYlbARkTGs6dnEyvSVonCZ9XVzm7JaFZZmI52VooTPMnI9kkFi76Z8AzYp67tIg7ovLdDqOTtwpgzTBqUlvxWQJro5r%2BbnOrrzYorIap'
 				}
 		response = requests.request("PUT", url, headers=headers, data=payload)
-		room.send_text(f"Hei, uusi video on litteroitavana, videon linkki on: {link_info.get_link}, ilmoittautumislinkki: {re2}.\nRakkautta ja raivoa, tekstitykset-bot.")
-		flash('Video successfully uploaded')
+		room.send_text(f"Hei, uusi video on litteroitavana, videon linkki on: {link_info.get_link()}, ilmoittautumislinkki: {re2}.\nRakkautta ja raivoa, tekstitykset-bot.")
+		flash('Video successfully uploaded') 
 		return render_template(f'{language}/uploaded.html')
 @app.route('/display/<filename>')
 def display_video(filename):
