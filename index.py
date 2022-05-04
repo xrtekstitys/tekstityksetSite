@@ -47,14 +47,14 @@ def create_dm(element):
 	room.invite_user(element)
 	onetime(element, room)
 def onetime(language, element, room):
-	file_exists = os.path.exists(f'{element}.txt')
+	file_exists = os.path.exists(f'{element}_secret.txt')
 	if file_exists == "False":
 		secret = pyotp.random_base32()
-		f = open(f"{element}.txt", "w")
+		f = open(f"{element}_secret.txt", "w")
 		f.write(secret)
 		f.close()
 	elif file_exists == "True":
-		f = open(f"{element}.txt", "r")
+		f = open(f"{element}_secret.txt", "r")
 		secret = f.read()
 		f.close()    
 	totp = pyotp.TOTP(secret)
@@ -64,13 +64,13 @@ def onetime(language, element, room):
 	f.close()
 	if language == "fi":
 		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/fi/verify/{element}, niin videosi teksittäminen alkaa. Koodi on {totp}.")
-		onetime_show(language)
+		onetime_show()
 	elif language == "en":
 		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/en/verify/{element}, niin videosi teksittäminen alkaa. Koodi on {totp}.")
-		onetime_show(language)
+		onetime_show()
 	elif language == "se":
 		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/se/verify/{element}, niin videosi teksittäminen alkaa. Koodi on {totp}.")
-		onetime_show(language)
+		onetime_show()
 @app.route('/<language>')
 def redirect(language):
 	if language == "fi":
@@ -92,10 +92,19 @@ def onetime_verify(language):
 	f = open(f"{element}_otp.txt", "r")
 	otp = f.read()
 	f.close()
+	duuni = open(f"{element}.txt", "r")
+	duuni1 = duuni.read()
+	duuni.close()
+	nc = nextcloud_client.Client('https://cloud.elokapina.fi/')
+	nc.login('', '')
+	link_info = nc.share_file_with_link(f'{duuni1}.mp4')
+	re2 = make_link(duuni1)
 	if totp == otp:
+		client = MatrixClient("https://matrix.elokapina.fi", token="", user_id="")
+		send_video(client, re2, link_info)
 		return render_template(f'{language}/verifed.html')
 	else:
-		return render_template(f'{language}/unverifed.html')
+		return render_template(f'{language}/permissions.html')
 
 @app.route("/<language>", methods=["POST"])
 def upload(language):
@@ -114,7 +123,7 @@ def upload(language):
 			duuni1 = secure_filename(duuni)
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 			print('upload_video filename: ' + filename)
-			client = MatrixClient("https://matrix.elokapina.fi", token="", user_id="")
+			
 			nc = nextcloud_client.Client('https://cloud.elokapina.fi/')
 			nc.login('', '')
 			clip = moviepy.VideoFileClip(f"static/uploads/{filename}")
@@ -133,14 +142,18 @@ def upload(language):
 			f.close()
 			nc.put_file(f"{duuni1}_info.txt", f"{duuni1}.txt")
 			nc.copy("Ilmo_malli.xlsx", f'ilmo_{duuni1}.xlsx')
-			re2 = make_link(duuni1)
-			link_info = nc.share_file_with_link(f'{duuni1}.mp4')
-			room = client.join_room("!xHNYRcoggfUUdIDlhb:elokapina.fi")
-			room.send_text(f"Hei, uusi video on auennut litteroitavaksi, videon voi ladata osoitteesta {link_info.get_link()}, merkkaa {re2} <-- tuonne, element käyttäjätunnuksesi sekä se minkä pätkän litteroit, niin ei tule tuplia.")
+			f = open(f"{element}.txt", "w")
+			f.write(duuni1)
+			f.close()
+			create_dm(element)
 			flash('Video successfully uploaded')
 			return render_template(f'{language}/uploaded.html')
 		else:
 			return render_template(f'{language}/permissions.html')
+
+def send_video(client, re2, link_info):
+    room = client.join_room("!xHNYRcoggfUUdIDlhb:elokapina.fi")
+    room.send_text(f"Hei, uusi video on auennut litteroitavaksi, videon voi ladata osoitteesta {link_info.get_link()}, merkkaa {re2} <-- tuonne, element käyttäjätunnuksesi sekä se minkä pätkän litteroit, niin ei tule tuplia.")
 @app.route('/display/<filename>')
 def display_video(filename):
 	return redirect(url_for('static', filename='uploads/' + filename), code=301)
