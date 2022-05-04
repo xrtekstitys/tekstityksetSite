@@ -72,7 +72,7 @@ def onetime(language, element, room):
 		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/se/verify/{element}, niin videosi teksittäminen alkaa. Koodi on {totp}.")
 		onetime_show()
 @app.route('/<language>')
-def redirect(language):
+def redirect1(language):
 	if language == "fi":
 		return render_template('fi/index.html')
 	elif language == "en":
@@ -82,10 +82,10 @@ def redirect(language):
 @app.route("/")
 def redi():
 	return render_template('select.html')
-@app.route("/<language>/verify/<username>")
+@app.route("/verify/<language>")
 def onetime_show(language):
-	return render_template(f'/{language}/verify.html')
-@app.route("/<language>/verify/", methods=["POST"])
+	return render_template(f'{language}/verify.html')
+@app.route("/verify/<language>", methods=["POST"])
 def onetime_verify(language):
 	element = request.form.get("element")
 	totp = request.form.get("totp_send")
