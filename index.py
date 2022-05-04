@@ -32,7 +32,6 @@ def onetime_verify(language):
 	matrix_token = "syt_dGVrc3RpdHlrc2V0_ktlhkvqpXHHbSTnKgLtD_4gd6M0"
 	matrix = MatrixHttpApi("https://matrix.elokapina.fi", token=matrix_token)
 	if element in matrix_map:
-		# Avaa dictionaryn paikalliseen tiedostopolkuun
 		with open('./cant.pickle', 'br') as file:
 			matrix_map = pickle.load(file)
 			room_id = matrix_map[hash(element)]
@@ -44,6 +43,10 @@ def onetime_verify(language):
 		room1 = str(room).replace("'}", "")
 		MatrixHttpApi.set_room_name(matrix, room1, element)
 		MatrixHttpApi.invite_user(matrix, room1, element)
+		matrix_map = dict()
+		matrix_map[hash(element)] = room1
+		with open('./dont.pickle', 'bw') as file:
+			pickle.dump(matrix_map, file)
 	secret = pyotp.random_base32()
 	totp = pyotp.TOTP(secret)
 	totp = totp.now()
