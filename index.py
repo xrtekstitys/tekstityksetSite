@@ -25,7 +25,10 @@ def redirect1(language):
 def redi():
 	return render_template('select.html')
 @app.route("/verify/<language>/", methods=["POST"])
-def onetime_verify(language, client):
+def onetime_verify(language):
+	matrix_token = ""
+	matrix_username = ""
+	client = MatrixClient("https://matrix.elokapina.fi", token=matrix_token, user_id=matrix_username)
 	element = request.form.get("element")
 	secret = pyotp.random_base32()
 	totp = pyotp.TOTP(secret)
