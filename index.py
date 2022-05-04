@@ -5,6 +5,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 import moviepy.editor as moviepy
 import nextcloud_client
+from matrix_client.client import MatrixClient
 import pyotp
 import requests
 from flask import Flask, flash, redirect, render_template, request, url_for
@@ -19,10 +20,11 @@ def redirect1(language):
 		return render_template('en/verify_1.html')
 	elif language == "se":
 		return render_template('se/verify_1.html')
+	return render_template("select.html")
 @app.route("/")
 def redi():
 	return render_template('select.html')
-@app.route("/verify/<language>", methods=["POST"])
+@app.route("/verify/<language>/", methods=["POST"])
 def onetime_verify(language, client):
 	element = request.form.get("element")
 	secret = pyotp.random_base32()
@@ -41,19 +43,30 @@ def onetime_verify(language, client):
 	elif language == "se":
 		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/verify/se, niin voit ladata videon palvelimelle. Koodi on {totp}.")
 	return render_template(f"{language}/verify.html")
-@app.route("/verify_final/<language>", methods=["POST"])
-def onetime_verify1(language, client):
+@app.route("/verify_final/<language>/", methods=["POST"])
+def onetime_verify1(language):	
 	element = request.form.get("element")
 	otp = request.form.get("totp_send")
 	f = open(f"{element}_otp.txt", "r")
 	totp = f.read()
+	f.close()
+	f = open(f"{element}_otp.txt", "w")
+	f.write()
 	f.close()
 	if otp == totp:
 		return render_template(f'{language}/index.html')
 	else:
 		return render_template(f'{language}/permissions.html')
 @app.route("/<language>", methods=["POST"])
-def upload(language, nc, client):
+def upload(language):
+	matrix_token = ""
+	matrix_username = ""
+	room_id = ""
+	client = MatrixClient("https://matrix.elokapina.fi", token=matrix_token, user_id=matrix_username)
+	nextcloud_username = ""
+	nextcloud_password = ""
+	nc = nextcloud_client.Client('https://cloud.elokapina.fi/')
+	nc.login(nextcloud_username, nextcloud_password)
 	if 'file' not in request.files:
 		flash('No file part')
 		return redirect(request.url)
@@ -115,10 +128,6 @@ def upload(language, nc, client):
 		room.send_text(f"Hei, uusi video on litteroitavana, videon linkki on: {link_info.get_link}, ilmoittautumislinkki: {re2}.\nRakkautta ja raivoa, tekstitykset-bot.")
 		flash('Video successfully uploaded')
 		return render_template(f'{language}/uploaded.html')
-
-def send_video(client, re2, link_info):
-    room = client.join_room("!xHNYRcoggfUUdIDlhb:elokapina.fi")
-    room.send_text(f"Hei, uusi video on auennut litteroitavaksi, videon voi ladata osoitteesta {link_info.get_link()}, merkkaa {re2} <-- tuonne, element käyttäjätunnuksesi sekä se minkä pätkän litteroit, niin ei tule tuplia.")
 @app.route('/display/<filename>')
 def display_video(filename):
 	return redirect(url_for('static', filename='uploads/' + filename), code=301)
