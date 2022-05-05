@@ -3,6 +3,7 @@ import time
 import pickle
 from settings import client, nc, room_id
 import urllib.request
+import os.path
 import xml.etree.ElementTree as ET
 import moviepy.editor as moviepy
 import nextcloud_client
@@ -31,23 +32,38 @@ def onetime_verify(language):
 	element = request.form.get("element")
 	matrix_token = ""
 	matrix = MatrixHttpApi("https://matrix.elokapina.fi", token=matrix_token)
-	if hash(element) in matrix_map:
-		# Avaa dictionaryn paikalliseen tiedostopolkuun
-		with open('./cant.pickle', 'br') as file:
-			matrix_map = pickle.load(file)
-			room_id = matrix_map[hash(element)]
-			room1 = room_id
+	if os.path.exists("./cant.pickle"):
+		if hash(element) in matrix_map:
+			# Avaa dictionaryn paikalliseen tiedostopolkuun
+			with open('./cant.pickle', 'br') as file:
+				matrix_map = pickle.load(file)
+				room1 = matrix_map[hash(element)]
+		else:
+			room = MatrixHttpApi.create_room(matrix)
+			print(str(room))
+			room1 = str(room).replace("{'room_id': '", "")
+			room1 = str(room).replace("'}", "")
+			MatrixHttpApi.set_room_name(matrix, room1, element)
+			MatrixHttpApi.invite_user(matrix, room1, element)
+			matrix_map[hash(element)] = room1
+			with open('./cant.pickle', 'bw') as file:
+				pickle.dump(matrix_map, file)
 	else:
-		room = MatrixHttpApi.create_room(matrix)
-		print(str(room))
-		room1 = str(room).replace("{'room_id': '", "")
-		room1 = str(room).replace("'}", "")
-		MatrixHttpApi.set_room_name(matrix, room1, element)
-		MatrixHttpApi.invite_user(matrix, room1, element)
-		matrix_map = dict()
-		matrix_map[hash(element)] = room1
-		with open('./cant.pickle', 'bw') as file:
-			pickle.dump(matrix_map, file)
+		if hash(element) in matrix_map:
+			# Avaa dictionaryn paikalliseen tiedostopolkuun
+			with open('./cant.pickle', 'br') as file:
+				matrix_map = pickle.load(file)
+				room1 = matrix_map[hash(element)]
+		else:
+			room = MatrixHttpApi.create_room(matrix)
+			print(str(room))
+			room1 = str(room).replace("{'room_id': '", "")
+			room1 = str(room).replace("'}", "")
+			MatrixHttpApi.set_room_name(matrix, room1, element)
+			MatrixHttpApi.invite_user(matrix, room1, element)
+			matrix_map[hash(element)] = room1
+			with open('./cant.pickle', 'bw') as file:
+				pickle.dump(matrix_map, file)
 	secret = pyotp.random_base32()
 	totp = pyotp.TOTP(secret)
 	totp = totp.now()
