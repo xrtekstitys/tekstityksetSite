@@ -38,9 +38,8 @@ def onetime_verify(language):
 			matrix_map = pickle.load(file)
 			if hash(element) in matrix_map:
 				# Avaa dictionaryn paikalliseen tiedostopolkuun
-				with open('./cant.pickle', 'br') as file:
-					matrix_map = pickle.load(file)
-					room1 = matrix_map[hash(element)]
+				matrix_map = pickle.load(file)
+				room1 = matrix_map[hash(element)]
 			else:
 				room = MatrixHttpApi.create_room(matrix)
 				print(str(room))
