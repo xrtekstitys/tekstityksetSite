@@ -11,7 +11,8 @@ from matrix_client.client import MatrixClient
 from matrix_client.api import MatrixHttpApi
 import pyotp
 import requests
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, url_for, make_response
+from flask import *
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from werkzeug.utils import secure_filename
 from app import app
@@ -69,10 +70,12 @@ def onetime_verify(language):
 	f.close()
 	text = f"Varmennuskoodisi sivustolle tekstitykset.elokapina.fi on: {totp}"
 	MatrixHttpApi.send_message(matrix, room1, text)
-	return render_template(f"{language}/verify.html")
+	resp = make_response(render_template(f"{language}/verify.html"))
+	resp.set_cookie('matrix', element)
+	return resp
 @app.route("/verify_final/<language>/", methods=["POST"])
 def onetime_verify1(language):	
-	element = request.form.get("element")
+	element = request.cookies.get('matrix')
 	otp = request.form.get("totp_send")
 	f = open(f"{element}_otp.txt", "r")
 	totp = f.read()
@@ -97,7 +100,7 @@ def upload(language):
 	if 'file' not in request.files:
 		flash('No file part')
 		return redirect(request.url)
-	element = request.form.get("element")
+	element = request.cookies.get('matrix')
 	file = request.files['file']
 	duuni = request.form.get("duuni")
 	englanti = request.form.get("English")
