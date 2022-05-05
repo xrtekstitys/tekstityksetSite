@@ -33,37 +33,34 @@ def onetime_verify(language):
 	matrix_token = ""
 	matrix = MatrixHttpApi("https://matrix.elokapina.fi", token=matrix_token)
 	if os.path.exists("./cant.pickle"):
-		if hash(element) in matrix_map:
-			# Avaa dictionaryn paikalliseen tiedostopolkuun
-			with open('./cant.pickle', 'br') as file:
-				matrix_map = pickle.load(file)
-				room1 = matrix_map[hash(element)]
-		else:
-			room = MatrixHttpApi.create_room(matrix)
-			print(str(room))
-			room1 = str(room).replace("{'room_id': '", "")
-			room1 = str(room).replace("'}", "")
-			MatrixHttpApi.set_room_name(matrix, room1, element)
-			MatrixHttpApi.invite_user(matrix, room1, element)
-			matrix_map[hash(element)] = room1
-			with open('./cant.pickle', 'bw') as file:
-				pickle.dump(matrix_map, file)
+		with open('./cant.pickle', 'br') as file:
+			matrix_map = pickle.load(file)
+			if hash(element) in matrix_map:
+				# Avaa dictionaryn paikalliseen tiedostopolkuun
+				with open('./cant.pickle', 'br') as file:
+					matrix_map = pickle.load(file)
+					room1 = matrix_map[hash(element)]
+			else:
+				room = MatrixHttpApi.create_room(matrix)
+				print(str(room))
+				room1 = str(room).replace("{'room_id': '", "")
+				room1 = str(room1).replace("'}", "")
+				MatrixHttpApi.set_room_name(matrix, room1, element)
+				MatrixHttpApi.invite_user(matrix, room1, element)
+				matrix_map[hash(element)] = room1
+				with open('./cant.pickle', 'bw') as file:
+					pickle.dump(matrix_map, file)
 	else:
-		if hash(element) in matrix_map:
-			# Avaa dictionaryn paikalliseen tiedostopolkuun
-			with open('./cant.pickle', 'br') as file:
-				matrix_map = pickle.load(file)
-				room1 = matrix_map[hash(element)]
-		else:
-			room = MatrixHttpApi.create_room(matrix)
-			print(str(room))
-			room1 = str(room).replace("{'room_id': '", "")
-			room1 = str(room).replace("'}", "")
-			MatrixHttpApi.set_room_name(matrix, room1, element)
-			MatrixHttpApi.invite_user(matrix, room1, element)
-			matrix_map[hash(element)] = room1
-			with open('./cant.pickle', 'bw') as file:
-				pickle.dump(matrix_map, file)
+		room = MatrixHttpApi.create_room(matrix)
+		print(str(room))
+		room1 = str(room).replace("{'room_id': '", "")
+		room1 = str(room).replace("'}", "")
+		MatrixHttpApi.set_room_name(matrix, room1, element)
+		MatrixHttpApi.invite_user(matrix, room1, element)
+		matrix_map = dict()
+		matrix_map[hash(element)] = room1
+		with open('./cant.pickle', 'bw') as file:
+			pickle.dump(matrix_map, file)
 	secret = pyotp.random_base32()
 	totp = pyotp.TOTP(secret)
 	totp = totp.now()
@@ -71,7 +68,7 @@ def onetime_verify(language):
 	f.write(totp)
 	f.close()
 	text = f"Varmennuskoodisi sivustolle tekstitykset.elokapina.fi on: {totp}"
-	MatrixHttpApi.send_text(matrix, room1, text)
+	MatrixHttpApi.send_message(matrix, room1, text)
 	return render_template(f"{language}/verify.html")
 @app.route("/verify_final/<language>/", methods=["POST"])
 def onetime_verify1(language):	
@@ -80,13 +77,13 @@ def onetime_verify1(language):
 	f = open(f"{element}_otp.txt", "r")
 	totp = f.read()
 	f.close()
-	f = open(f"{element}_otp.txt", "w")
-	f.write("")
-	f.close()
 	if otp == totp:
+		f = open(f"{element}_otp.txt", "w")
+		f.write("")
+		f.close()
 		return render_template(f'{language}/index.html')
 	else:
-		return render_template(f'{language}/permissions.html')
+		return render_template(f'{language}/verify.html')
 @app.route("/<language>", methods=["POST"])
 def upload(language):
 	matrix_token = ""
