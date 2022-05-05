@@ -18,12 +18,15 @@ from werkzeug.utils import secure_filename
 from app import app
 @app.route('/<language>')
 def redirect1(language):
-	if language == "fi":
-		return render_template('fi/verify_1.html')
-	elif language == "en":
-		return render_template('en/verify_1.html')
-	elif language == "se":
-		return render_template('se/verify_1.html')
+	if 'matrix' in request.cookies:
+		return render_template(f'{language}/index.html')
+	else:
+		if language == "fi":
+			return render_template('fi/verify_1.html')
+		elif language == "en":
+			return render_template('en/verify_1.html')
+		elif language == "se":
+			return render_template('se/verify_1.html')
 	return render_template("select.html")
 @app.route("/")
 def redi():
@@ -68,9 +71,8 @@ def onetime_verify(language):
 	f.close()
 	text = f"Varmennuskoodisi sivustolle tekstitykset.elokapina.fi on: {totp}"
 	MatrixHttpApi.send_message(matrix, room1, text)
-	resp = make_response(render_template(f"{language}/verify.html"))
-	resp.set_cookie('matrix', element)
-	return resp
+	
+	return render_template(f"{language}/verify.html")
 @app.route("/verify_final/<language>/", methods=["POST"])
 def onetime_verify1(language):	
 	element = request.cookies.get('matrix')
@@ -82,7 +84,9 @@ def onetime_verify1(language):
 		f = open(f"{element}_otp.txt", "w")
 		f.write("")
 		f.close()
-		return render_template(f'{language}/index.html')
+		resp = make_response(render_template(f"{language}/index.html"))
+		resp.set_cookie('matrix', element)
+		return resp
 	else:
 		return render_template(f'{language}/verify.html')
 @app.route("/<language>", methods=["POST"])
