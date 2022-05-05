@@ -1,14 +1,18 @@
 import os
 import time
+import pickle
 from settings import client, nc, room_id
 import urllib.request
+import os.path
 import xml.etree.ElementTree as ET
 import moviepy.editor as moviepy
 import nextcloud_client
 from matrix_client.client import MatrixClient
+from matrix_client.api import MatrixHttpApi
 import pyotp
 import requests
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, url_for, make_response
+from flask import *
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 from werkzeug.utils import secure_filename
 from app import app
@@ -26,40 +30,61 @@ def redi():
 	return render_template('select.html')
 @app.route("/verify/<language>/", methods=["POST"])
 def onetime_verify(language):
-	matrix_token = ""
-	matrix_username = ""
-	client = MatrixClient("https://matrix.elokapina.fi", token=matrix_token, user_id=matrix_username)
 	element = request.form.get("element")
+	matrix_token = ""
+	matrix = MatrixHttpApi("https://matrix.elokapina.fi", token=matrix_token)
+	if os.path.exists("./cant.pickle"):
+		with open('./cant.pickle', 'br') as file:
+			matrix_map = pickle.load(file)
+			if hash(element) in matrix_map:
+				# Avaa dictionaryn paikalliseen tiedostopolkuun
+				room1 = matrix_map[hash(element)]
+			else:
+				room = MatrixHttpApi.create_room(matrix)
+				print(str(room))
+				room1 = str(room).replace("{'room_id': '", "")
+				room1 = str(room1).replace("'}", "")
+				MatrixHttpApi.set_room_name(matrix, room1, element)
+				MatrixHttpApi.invite_user(matrix, room1, element)
+				matrix_map[hash(element)] = room1
+				with open('./cant.pickle', 'bw') as file:
+					pickle.dump(matrix_map, file)
+	else:
+		room = MatrixHttpApi.create_room(matrix)
+		print(str(room))
+		room1 = str(room).replace("{'room_id': '", "")
+		room1 = str(room).replace("'}", "")
+		MatrixHttpApi.set_room_name(matrix, room1, element)
+		MatrixHttpApi.invite_user(matrix, room1, element)
+		matrix_map = dict()
+		matrix_map[hash(element)] = room1
+		with open('./cant.pickle', 'bw') as file:
+			pickle.dump(matrix_map, file)
 	secret = pyotp.random_base32()
 	totp = pyotp.TOTP(secret)
 	totp = totp.now()
 	f = open(f"{element}_otp.txt", "w")
 	f.write(totp)
 	f.close()
-	room = client.create_room()
-	room.set_room_name(f"{element}")
-	room.invite_user(element)
-	if language == "fi":
-		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/verify/fi, niin voit ladata videon palvelimelle. Koodi on {totp}.")
-	elif language == "en":
-		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/verify/en, niin voit ladata videon palvelimelle. Koodi on {totp}.")
-	elif language == "se":
-		room.send_text(f"Ohessa sinun varmennuskoodisi, syötä se sivulle https://tekstitykset.elokapina.fi/verify/se, niin voit ladata videon palvelimelle. Koodi on {totp}.")
-	return render_template(f"{language}/verify.html")
+	text = f"Varmennuskoodisi sivustolle tekstitykset.elokapina.fi on: {totp}"
+	MatrixHttpApi.send_message(matrix, room1, text)
+	resp = make_response(render_template(f"{language}/verify.html"))
+	resp.set_cookie('matrix', element)
+	return resp
 @app.route("/verify_final/<language>/", methods=["POST"])
 def onetime_verify1(language):	
-	element = request.form.get("element")
+	element = request.cookies.get('matrix')
 	otp = request.form.get("totp_send")
 	f = open(f"{element}_otp.txt", "r")
 	totp = f.read()
 	f.close()
-	f = open(f"{element}_otp.txt", "w")
-	f.write("")
-	f.close()
 	if otp == totp:
+		f = open(f"{element}_otp.txt", "w")
+		f.write("")
+		f.close()
 		return render_template(f'{language}/index.html')
 	else:
-		return render_template(f'{language}/permissions.html')
+		return render_template(f'{language}/verify.html')
 @app.route("/<language>", methods=["POST"])
 def upload(language):
 	matrix_token = ""
@@ -73,7 +98,7 @@ def upload(language):
 	if 'file' not in request.files:
 		flash('No file part')
 		return redirect(request.url)
-	element = request.form.get("element")
+	element = request.cookies.get('matrix')
 	file = request.files['file']
 	duuni = request.form.get("duuni")
 	englanti = request.form.get("English")
