@@ -35,13 +35,14 @@ def redi():
 @app.route("/verify/<language>/", methods=["POST"])
 def onetime_verify(language):
 	element = request.form.get("element")
+	element_hash = hashlib.md5(element).hexdigest()
 	matrix_token = ""
 	matrix = MatrixHttpApi("https://matrix.elokapina.fi", token=matrix_token)
 	if os.path.exists("./cant.pickle"):
 		with open('./cant.pickle', 'br') as file:
 			matrix_map = pickle.load(file)
-			if [element] in matrix_map:
-				room1 = matrix_map[element]
+			if element_hash in matrix_map:
+				room1 = matrix_map[element_hash]
 			else:
 				room = MatrixHttpApi.create_room(matrix)
 				print(str(room))
@@ -49,7 +50,7 @@ def onetime_verify(language):
 				room1 = str(room1).replace("'}", "")
 				MatrixHttpApi.set_room_name(matrix, room1, element)
 				MatrixHttpApi.invite_user(matrix, room1, element)
-				matrix_map[element] = room1
+				matrix_map[element_hash] = room1
 				with open('./cant.pickle', 'bw') as file:
 					pickle.dump(matrix_map, file)
 	else:
@@ -60,7 +61,7 @@ def onetime_verify(language):
 		MatrixHttpApi.set_room_name(matrix, room1, "Vahvistuskoodi, tekstitykset.elokapina.fi")
 		MatrixHttpApi.invite_user(matrix, room1, element)
 		matrix_map = dict()
-		matrix_map[element] = room1
+		matrix_map[element_hash] = room1
 		with open('./cant.pickle', 'bw') as file:
 			pickle.dump(matrix_map, file)
 	secret = pyotp.random_base32()
