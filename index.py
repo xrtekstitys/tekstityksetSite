@@ -41,7 +41,6 @@ def onetime_verify(language):
 		with open('./cant.pickle', 'br') as file:
 			matrix_map = pickle.load(file)
 			if [element] in matrix_map:
-				# Avaa dictionaryn paikalliseen tiedostopolkuun
 				room1 = matrix_map[element]
 			else:
 				room = MatrixHttpApi.create_room(matrix)
