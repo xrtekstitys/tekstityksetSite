@@ -48,7 +48,7 @@ def onetime_verify(language):
 				print(str(room))
 				room1 = str(room).replace("{'room_id': '", "")
 				room1 = str(room1).replace("'}", "")
-				MatrixHttpApi.set_room_name(matrix, room1, element)
+				MatrixHttpApi.set_room_name(matrix, room1, "Vahvistuskoodi, tekstitykset.elokapina.fi")
 				MatrixHttpApi.invite_user(matrix, room1, element)
 				matrix_map[element_hash] = room1
 				with open('./cant.pickle', 'bw') as file:
