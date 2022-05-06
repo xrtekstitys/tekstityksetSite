@@ -3,6 +3,7 @@ import time
 import pickle
 from settings import client, nc, room_id
 import urllib.request
+import hashlib
 import os.path
 import xml.etree.ElementTree as ET
 import moviepy.editor as moviepy
@@ -39,9 +40,9 @@ def onetime_verify(language):
 	if os.path.exists("./cant.pickle"):
 		with open('./cant.pickle', 'br') as file:
 			matrix_map = pickle.load(file)
-			if hash(element) in matrix_map:
+			if [element] in matrix_map:
 				# Avaa dictionaryn paikalliseen tiedostopolkuun
-				room1 = matrix_map[hash(element)]
+				room1 = matrix_map[element]
 			else:
 				room = MatrixHttpApi.create_room(matrix)
 				print(str(room))
@@ -49,7 +50,7 @@ def onetime_verify(language):
 				room1 = str(room1).replace("'}", "")
 				MatrixHttpApi.set_room_name(matrix, room1, element)
 				MatrixHttpApi.invite_user(matrix, room1, element)
-				matrix_map[hash(element)] = room1
+				matrix_map[element] = room1
 				with open('./cant.pickle', 'bw') as file:
 					pickle.dump(matrix_map, file)
 	else:
@@ -60,7 +61,7 @@ def onetime_verify(language):
 		MatrixHttpApi.set_room_name(matrix, room1, "Vahvistuskoodi, tekstitykset.elokapina.fi")
 		MatrixHttpApi.invite_user(matrix, room1, element)
 		matrix_map = dict()
-		matrix_map[hash(element)] = room1
+		matrix_map[element] = room1
 		with open('./cant.pickle', 'bw') as file:
 			pickle.dump(matrix_map, file)
 	secret = pyotp.random_base32()
