@@ -35,7 +35,7 @@ def redi():
 @app.route("/verify/<language>/", methods=["POST"])
 def onetime_verify(language):
 	element = request.form.get("element")
-	element_hash = hashlib.md5(element).hexdigest()
+	element_hash = hashlib.md5(bytes(element, 'utf-8')).hexdigest()
 	matrix_token = ""
 	matrix = MatrixHttpApi("https://matrix.elokapina.fi", token=matrix_token)
 	if os.path.exists("./cant.pickle"):
