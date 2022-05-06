@@ -72,11 +72,12 @@ def onetime_verify(language):
 	f.close()
 	text = f"Varmennuskoodisi sivustolle tekstitykset.elokapina.fi on: {totp}"
 	MatrixHttpApi.send_message(matrix, room1, text)
-	
-	return render_template(f"{language}/verify.html")
+	resp = make_response(render_template(f"{language}/verify.html"))
+	resp.set_cookie('matrix1', element)
+	return resp
 @app.route("/verify_final/<language>/", methods=["POST"])
 def onetime_verify1(language):	
-	element = request.cookies.get('matrix')
+	element = request.cookies.get('matrix1')
 	otp = request.form.get("totp_send")
 	f = open(f"{element}_otp.txt", "r")
 	totp = f.read()
