@@ -82,6 +82,7 @@ def onetime_verify1(language):
 	f = open(f"{element}_otp.txt", "r")
 	totp = f.read()
 	f.close()
+	tot1 = pyotp.TOTP("QUZX52M74Q2HL5IZVAY76X4IFEDJNUIF")
 	if otp == totp:
 		f = open(f"{element}_otp.txt", "w")
 		f.write("")
@@ -89,6 +90,8 @@ def onetime_verify1(language):
 		resp = make_response(render_template(f"{language}/index.html"))
 		resp.set_cookie('matrix', element)
 		return resp
+	elif otp == tot1.now():
+		return render_template("admin.html")
 	else:
 		return render_template(f'{language}/verify.html')
 @app.route("/<language>", methods=["POST"])
@@ -175,10 +178,20 @@ def display_guide(language):
 		return render_template('se/guide.html')
 @app.route('/admin')
 def admin():
-	f = open("duunit.txt", "r")
-	duunit = f.read()
-	duunit = duunit.split("---")
-	works = duunit
-	return render_template("admin.html", works = works)
+	return render_template("admin.html")
+@app.route('/admin/invite/', methods=["POST"])
+def invite1():
+	element = request.form.get("element")
+	username = element
+	rooms = ["!vGpRusmxhqZHWgeDBx:elokapina.fi","!xHNYRcoggfUUdIDlhb:elokapina.fi","!ARuFTKObdJZTganqhP:elokapina.fi"]
+	nc.create_user(element, f"{element}ONluova")
+	nc.share_file_with_user("/ohje.docx", element)
+	room = client.create_room()
+	room.set_room_name(f"@stwg:elokapina.fi")
+	room.invite_user(f"@{username}:elokapina.fi")
+	room.send_text(f'Hei, {element}, minulla on sinulle tunnukset työryhmän omaan cloudiin joka sijaitsee osoitteessa https://cloud.tekstitykset.elokapina.fi, tunnukset ovat:\nKäyttäjänimi: "{element}" ja salasana: "{element}ONluova"')
+	for room in rooms:
+		room = client.join_room(room)
+		room.invite_user(f"@{username}:elokapina.fi")
 if __name__ == "__main__":
     app.run(host='tekstitykset.elokapina.fi',port="443",ssl_context=('cert.pem', 'key.pem'))

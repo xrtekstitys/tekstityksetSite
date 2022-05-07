@@ -4,7 +4,16 @@
 <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}"/> 
 <title>Tekstitykset</title>
 </head>
-{% for r in works %}
-    <p>{{works[r]}}</p>
-    <p>-{{r}}</p>
-{% endfor %}
+<h1>Create and invite new user:</h1>
+<form method="post" action="/admin/invite/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="text" class="entry" id="element" name="element" placeholder="Element käyttäjänimi" required>			
+		</p>
+		<p>
+		</p>
+    </dl>
+    <p>
+		<input type="submit" class="button" value="Send">
+	</p>
+</form>
