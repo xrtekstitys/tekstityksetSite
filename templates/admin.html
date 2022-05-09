@@ -1,14 +1,19 @@
 <!doctype html>
-<link rel="icon" type="image/png" sizes="32x32" href="https://elokapina.fi/favicon.png">
 <head>
 <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}"/> 
 <title>Tekstitykset</title>
 </head>
-<h1>Create and invite new user:</h1>
-<form method="post" action="/admin/invite/" enctype="multipart/form-data">
+<h1>Tee tili itsellesi.</h1>
+<form method="post" action="/create/" enctype="multipart/form-data">
     <dl>
 		<p>
-			<input type="text" class="entry" id="element" name="element" placeholder="Element käyttäjänimi" required>			
+			<input type="text" class="entry" id="element" name="element" placeholder="Käyttäjänimi" required>			
+		</p>
+        <p>
+			<input type="text" class="entry" id="password" name="password" placeholder="Salasana" required>			
+		</p>
+        <p>
+			<input type="text" class="entry" id="secret" name="secret" placeholder="Salaisuus" required>			
 		</p>
 		<p>
 		</p>

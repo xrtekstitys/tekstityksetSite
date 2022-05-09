@@ -102,7 +102,7 @@ def upload(language):
 	client = MatrixClient("https://matrix.elokapina.fi", token=matrix_token, user_id=matrix_username)
 	nextcloud_username = ""
 	nextcloud_password = ""
-	nc = nextcloud_client.Client('https://cloud.elokapina.fi/')
+	nc = nextcloud_client.Client('https://cloud.tekstitykset.elokapina.fi/')
 	nc.login(nextcloud_username, nextcloud_password)
 	if 'file' not in request.files:
 		flash('No file part')
@@ -117,9 +117,7 @@ def upload(language):
 		duuni1 = secure_filename(duuni)
 		file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		print('upload_video filename: ' + filename)
-		clip = moviepy.VideoFileClip(f"static/uploads/{filename}")
-		clip.write_videofile(f"{duuni1}.mp4")
-		nc.put_file(f"{duuni1}.mp4", f"{duuni1}.mp4")
+		nc.put_file(f"/videot-infot/{filename}", f"static/uploads/{filename}")
 		if englanti == "English":
 			englanti = "Halutaan"
 		elif englanti == "None":
@@ -131,38 +129,10 @@ def upload(language):
 		f = open(f"{duuni1}.txt", "w")
 		f.write(f"Element:\n{element} \nKäännökset:\nEnglanti:\n{englanti}\nRuotsi:\n{ruotsi}")
 		f.close()
-		nc.put_file(f"{duuni1}_info.txt", f"{duuni1}.txt")
-		nc.copy("Ilmo_malli.xlsx", f'ilmo_{duuni1}.xlsx')
-		link_info = nc.share_file_with_link(f'{duuni1}.mp4')
+		nc.put_file(f"/videot-infot/{duuni1}_info.txt", f"{duuni1}.txt")
+		link_info = nc.share_file_with_link(f"/videot-infot/{filename}")
 		room = client.join_room(room_id)
-		url = "https://cloud.elokapina.fi/ocs/v2.php/apps/files_sharing/api/v1/shares"
-		payload=f'path=ilmo_{duuni1}.xlsx&shareType=3'
-		headers = {
-				'OCS-APIRequest': 'true',
-				'Authorization': 'Basic dGVrc3RpdHlrc2V0OlRla3N0aXR5a3NldE9WQVRwYXJoYWl0YQ==',
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Cookie': 'cookie_test=test; __Host-nc_sameSiteCookielax=true; __Host-nc_sameSiteCookiestrict=true; oc8ap6e5iwyr=ffsifjkob3rqr9m7po5lb2urs1; oc_sessionPassphrase=1NYvqCIVcMtskFV625bXbpz8WYlbARkTGs6dnEyvSVonCZ9XVzm7JaFZZmI52VooTPMnI9kkFi76Z8AzYp67tIg7ovLdDqOTtwpgzTBqUlvxWQJro5r%2BbnOrrzYorIap'
-				}
-		response = requests.request("POST", url, headers=headers, data=payload)
-		print(response.text)
-		re = response.text
-		re = re.split()
-		re2 = re[-5]
-		re2 = re2.replace("<url>", "")
-		re2 = re2.replace("</url>", "")
-		re1 = re[9]
-		re1 = re1.replace("<id>", "")
-		re1 = re1.replace("</id>", "")
-		url = f"https://cloud.elokapina.fi/ocs/v2.php/apps/files_sharing/api/v1/shares/{re1}"
-		payload='permissions=3'
-		headers = {
-				'OCS-APIRequest': 'true',
-				'Authorization': 'Basic dGVrc3RpdHlrc2V0OlRla3N0aXR5a3NldE9WQVRwYXJoYWl0YQ==',
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Cookie': 'cookie_test=test; __Host-nc_sameSiteCookielax=true; __Host-nc_sameSiteCookiestrict=true; oc8ap6e5iwyr=ffsifjkob3rqr9m7po5lb2urs1; oc_sessionPassphrase=1NYvqCIVcMtskFV625bXbpz8WYlbARkTGs6dnEyvSVonCZ9XVzm7JaFZZmI52VooTPMnI9kkFi76Z8AzYp67tIg7ovLdDqOTtwpgzTBqUlvxWQJro5r%2BbnOrrzYorIap'
-				}
-		response = requests.request("PUT", url, headers=headers, data=payload)
-		room.send_text(f"Hei, uusi video on litteroitavana, videon linkki on: {link_info.get_link()}, ilmoittautumislinkki: {re2}.\nRakkautta ja raivoa, tekstitykset-bot.")
+		room.send_text(f"Hei, uusi video on litteroitavana, videon linkki on: {link_info.get_link()}.\nRakkautta ja raivoa, tekstitykset-bot.")
 		flash('Video successfully uploaded') 
 		return render_template(f'{language}/uploaded.html')
 @app.route('/display/<filename>')
@@ -176,9 +146,31 @@ def display_guide(language):
 		return render_template('en/guide.html')
 	elif language == "se":
 		return render_template('se/guide.html')
+@app.route('/tools/<tool>')
+def tool(tool):
+	if tool == "srt":
+		return render_template("tool.html")
+	elif tool == "cloud":
+		return redirect("https://cloud.tekstitykset.elokapina.fi/")
 @app.route('/admin')
 def admin():
 	return render_template("admin.html")
+@app.route('/create')
+def admin():
+	return render_template("admin.html")
+@app.route('/create/', methods=["POST"])
+def invite1():
+	nc = nextcloud_client.Client('https://cloud.tekstitykset.elokapina.fi/')
+	nc.login('', '')
+	element = request.form.get("element")
+	secret = request.form.get("secret")
+	password = request.form.get("password")
+	if secret == "":
+		username = element
+		nc.create_user(element, password)
+		return render_template("created.html", kauttis = username, password = password)
+	else:
+		return 'GO HELL'
 @app.route('/admin/invite/', methods=["POST"])
 def invite1():
 	element = request.form.get("element")
