@@ -1,0 +1,67 @@
+Debugger:
+  Matrix:
+    Enabled:
+      False
+    Room_id:
+      ""
+Matrix:
+  Server:
+    Url:
+      https://matrix.elokapina.fi
+  User:
+    Access_token:
+      
+Nextcloud:
+  Server:
+    Url:
+      randomurl.fi
+  User:
+    Username:
+      kissa
+    Password:
+      salainen
+Website:
+  Domains:
+    Main_domain:
+      some_domain.fi
+    Second_domain:
+      some_other.fi
+    Register_domain:
+      halloumi.fi
+    Joining_domain:
+      halloo.fi
+  Rooms:
+    Notification:
+      ""
+    2fa_room:
+      name:
+        "Varmennuskoodi tekstitykset.elokapina.fi"
+    WG:
+      - "!roomid"
+  Paths:
+    Upload:
+      "UPLOADPATH"
+    DB:
+      "PICKLEFILEPATH"
+  Secrets:
+    Admin:
+      2FA:
+        "2FASECRET"
+    Account:
+      Creating:
+        Enabled:
+          True
+        Token:
+          MATROX ACCOUNT CREATING TOKEN TO MATRIX SERVER
+        Server:
+          "SERVER"
+        Ending:
+          "matrixending"
+        Secret:
+          "SALAISUUS"
+    SSL:
+      privkey:
+        'privkey'
+      pubkey:
+        'pubkey'
+        
