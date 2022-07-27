@@ -60,7 +60,7 @@ def onetime_verify1(language):
 	f = open(f"{element}_otp.txt", "r")
 	totp = f.read()
 	f.close()
-	tot1 = pyotp.TOTP("QUZX52M74Q2HL5IZVAY76X4IFEDJNUIF")
+	tot1 = pyotp.TOTP(config.admin_2fa)
 	if otp == totp:
 		handle.debug(request)
 		f = open(f"{element}_otp.txt", "w")
