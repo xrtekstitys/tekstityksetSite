@@ -86,7 +86,7 @@ def upload(language):
 	handle.debug(request)
 	if 'file' not in request.files:
 		flash('No file part')
-		return redirect(request.url)
+		return redirect(MAIN_DOMAIN)
 	element = request.cookies.get('matrix')
 	file = request.files['file']
 	if element.startswith("@"):
@@ -165,7 +165,7 @@ def upload(language):
 	handle.debug(request)
 	if 'file' not in request.files:
 		flash('No file part')
-		return redirect(request.url)
+		return redirect(MAIN_DOMAIN)
 	element = request.cookies.get('matrix')
 	file = request.files['file']
 	if element.startswith("@"):
