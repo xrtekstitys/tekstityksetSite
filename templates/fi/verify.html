@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post" action="/verify_final/fi/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<label for="totp_send">Varmennus koodi</label>
+			<br>
+			<input type="text" class="input is-large" id="totp_send" name="totp_send" placeholder="Varmennus koodi" required minlength="6" maxlength="6">		
+		</p>
+    </dl>
+  <br>
+  <br>
+    <p>
+		<input type="submit" class="button" value="Varmenna">
+	</p>
+</form>
+{% endblock %}

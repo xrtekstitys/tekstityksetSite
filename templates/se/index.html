@@ -1,0 +1,28 @@
+<!doctype html>
+<link rel="icon" type="image/png" sizes="32x32" href="https://elokapina.fi/favicon.png">
+<head>
+<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}"/> 
+<title>Tekstitykset</title>
+</head>
+
+<h1>Ladda upp en video för att få undertexter till den</h1>
+<form method="post" action="/se" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="file" name="file" class="button" autocomplete="off" required>
+		</p>
+		<p>
+			<label for="duuni">Namnet på videon</label>
+			<br>
+			<input type="text" class="entry" id="duuni" name="duuni" placeholder="Namnet på videon" required minlength="5" maxlength="20">		
+		</p>
+        <label> Finska undertexter kommer alltid.</label><br>
+		<input type="checkbox" id="Sweden" class="entry" name="Sweden" value="Sweden">
+		<label for="vehicle1"> Jag vill ha svenska undertexter</label><br>
+		<input type="checkbox" id="English" class="entry" name="English" value="English">
+		<label for="vehicle2"> Jag vill ha engelska undertexter</label><br>
+    </dl>
+    <p>
+		<input type="submit" class="button" value="ladda upp till servern">
+	</p>
+</form>

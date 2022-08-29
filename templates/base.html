@@ -1,0 +1,50 @@
+<!-- templates/base.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tekstitykset</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://elokapina.fi/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+</head>
+
+<body>
+    <section class="hero is-primary is-fullheight">
+
+        <div class="hero-head">
+            <nav class="navbar">
+                <div class="container">
+
+                    <div id="navbarMenuHeroA" class="navbar-menu">
+                        <div class="navbar-end">
+                            {% if not request.cookies["login"] and request.cookies.get["worker"] or request.cookies.get["login"] == "" and request.cookies.get["worker"] %}
+                            <a href="{{ url_for('id.login') }}" class="navbar-item">
+                                Login
+                            </a>
+                            {% endif %}
+                            {% if request.cookies["login"] and not request.cookies["login"] == "" %}
+                            <a href="{{ url_for('id.ohje') }}" class="navbar-item">
+                                Ohjeet
+                            </a>
+                            <a href="https://cloud.xrtekstitys.fi" class="navbar-item">
+                                Cloud
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="hero-body">
+            <div class="container has-text-centered">
+               {% block content %}
+               {% endblock %}
+            </div>
+        </div>
+    </section>
+</body>
+</html>

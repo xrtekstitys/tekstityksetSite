@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Tee tili itsellesi.</h1>
+<form method="post" action="/signup-1/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="text" class="entry" id="username" name="username" placeholder="Käyttäjänimi" required>			
+		</p>
+        <p>
+			<input type="text" class="entry" id="password" name="password" placeholder="Salasana" required>			
+		</p>
+    </dl>
+    <p>
+		<input type="submit" class="button" value="Send">
+	</p>
+</form>
+{% endblock %}
