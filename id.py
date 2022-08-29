@@ -4,12 +4,12 @@ import nextcloud_client
 from api import MatrixHttpApi
 from functools import partial
 from matrix_actions import matrix
-
+cloud_adress = ""
 
 import pickle
 import hashlib
 id = Blueprint('id', __name__)
-id_route = partial(id.route, host="id.xrtekstitys.fi")
+id_route = partial(id.route, host="")
 def hash_cat(cat):
     hashlib.md5(bytes(cat, 'utf-8')).hexdigest()
     return cat
@@ -119,13 +119,13 @@ def verification():
     username = username.replace(":elokapina.fi", "")
     if code == data:
         put_user(username, hash_cat(request.cookies.get("pass")))
-        resp = make_response(redirect("https://cloud.xrtekstitys.fi/"))
+        resp = make_response(redirect(cloud_adress))
         resp.delete_cookie('pass')
         resp.delete_cookie('username')
         return resp
     else:
         return "ERORR"
-matrix_account = MatrixHttpApi("https://matrix.elokapina.fi", token="0e1ca3a3-f60b-40bb-9357-cd7b4d49515bd33c3bba-71ab-43ee-a07a-c4bf0ef89e82")
+matrix_account = MatrixHttpApi("", token="")
 def create_room(element):
     room = MatrixHttpApi.create_room(matrix_account, False, [element])
     room_id = str(room).replace("{'room_id': '", "")
@@ -139,7 +139,7 @@ def send_verification_message(room_id, element):
     f = open(f"{element}_otp.txt", "w")
     f.write(totp)
     f.close()
-    send_message(room_id, f"Varmennuskoodisi XR-tekstitys tilin luontiin on: {totp}")
+    send_message(room_id, f"")
 def send_message(room_id, message):
     MatrixHttpApi.send_message(matrix_account, room_id, message)
     return "OK"
