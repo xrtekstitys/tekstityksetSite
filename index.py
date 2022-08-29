@@ -231,4 +231,4 @@ app.register_blueprint(third)
 app.register_blueprint(id)
 
 if __name__ == '__main__':
-    app.run(host=MAIN_DOMAIN, port=443, debug=True, threaded=True,ssl_context=config.ssl)
+    app.run(host=MAIN_DOMAIN, port=443, debug=False, threaded=True,ssl_context=config.ssl)
