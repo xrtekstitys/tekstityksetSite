@@ -3,68 +3,68 @@ Debugger:
     Enabled:
       True
     Room_id:
-      "!ZgIfvqBWhWeMrAvJtj:elokapina.fi"
+      ""
 Matrix:
   Server:
     Url:
-      https://matrix.elokapina.fi
+      matrix_url
   User:
     Access_token:
-      0e1ca3a3-f60b-40bb-9357-cd7b4d49515bd33c3bba-71ab-43ee-a07a-c4bf0ef89e82
+      matrix_access
 Nextcloud:
   Server:
     Url:
-      https://cloud.tekstitykset.elokapina.fi/
+      nextcloud_url
   User:
     Username:
-      stwg
+      nextcloud_username
     Password:
-      Shohp8sa!
+      nextcloud_password
 Website:
   Domains:
     Main_domain:
-      tekstitykset.elokapina.fi
+      main_domain
     Second_domain:
-      xrtekstitys.fi
+      second_domain
     Register_domain:
-      ilmo.xrtekstitys.fi
+      register_domain
     Joining_domain:
-      id.xrtekstitys.fi
+      joining_domain
   Rooms:
     Notification:
-      "!QeyWAqWJmqRJrttXoe:elokapina.fi"
+      ""
     2fa_room:
       name:
-        "Varmennuskoodi tekstitykset.elokapina.fi"
+        ""
     WG:
-      - "!aiigmLapQEaYWZOnbG:elokapina.fi"
-      - "!mSTQVEbDKZFaYKHMcV:elokapina.fi"
-      - "!TEJeLrFNhADSfIRGkT:elokapina.fi"
-      - "!QeyWAqWJmqRJrttXoe:elokapina.fi"
+      - ""
+      - ""
+      - ""
+      - ""
   Paths:
     Upload:
-      "/root/nettisivu/static/uploads/"
+      ""
     DB:
-      "/root/nettisivu/cant.pickle"
+      ""
   Secrets:
     Admin:
       2FA:
-        "QUZX52M74Q2HL5IZVAY76X4IFEDJNUIF"
+        ""
     Account:
       Creating:
         Enabled:
           True
         Token:
-          syt_cm9vdA_WxbvAEQdhibgKNvpFFGM_2TAVmQ
+          token
         Server:
-          "https://matrix.xrtekstitys.fi:8448"
+          ""
         Ending:
-          "matrix.xrtekstitys.fi"
+          ""
         Secret:
-          "TekstityksetOVAThelvettiä"
+          ""
     SSL:
       privkey:
-        '/etc/letsencrypt/live/ilmo.xrtekstitys.fi/privkey.pem'
+        ''
       pubkey:
-        '/etc/letsencrypt/live/ilmo.xrtekstitys.fi/fullchain.pem'
+        ''
         
