@@ -1,0 +1,15 @@
+functools
+pyotp
+flask
+werkzeug
+json
+warnings
+requests
+time
+matrix_client
+urllib3
+os
+hashlib
+pickle
+nextcloud_client
+yaml
