@@ -1,0 +1,70 @@
+Debugger:
+  Matrix:
+    Enabled:
+      True
+    Room_id:
+      ""
+Matrix:
+  Server:
+    Url:
+      matrix_url
+  User:
+    Access_token:
+      matrix_access
+Nextcloud:
+  Server:
+    Url:
+      nextcloud_url
+  User:
+    Username:
+      nextcloud_username
+    Password:
+      nextcloud_password
+Website:
+  Domains:
+    Main_domain:
+      main_domain
+    Second_domain:
+      second_domain
+    Register_domain:
+      register_domain
+    Joining_domain:
+      joining_domain
+  Rooms:
+    Notification:
+      ""
+    2fa_room:
+      name:
+        ""
+    WG:
+      - ""
+      - ""
+      - ""
+      - ""
+  Paths:
+    Upload:
+      ""
+    DB:
+      ""
+  Secrets:
+    Admin:
+      2FA:
+        ""
+    Account:
+      Creating:
+        Enabled:
+          True
+        Token:
+          token
+        Server:
+          ""
+        Ending:
+          ""
+        Secret:
+          ""
+    SSL:
+      privkey:
+        ''
+      pubkey:
+        ''
+        
