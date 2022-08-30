@@ -4,7 +4,7 @@ import nextcloud_client
 from api import MatrixHttpApi
 from functools import partial
 from matrix_actions import matrix
-cloud_adress = ""
+cloud_adress = "" #TODO add this to config
 
 import pickle
 import hashlib
