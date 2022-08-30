@@ -2,15 +2,15 @@ from functools import partial
 
 import pyotp
 from flask import (Blueprint, Flask, flash, make_response, redirect,
-                   render_template, request)
+                   render_template, request, abort)
 from werkzeug.utils import secure_filename
-
+from id import id_route, id
 from config import config
 from data import data, texts
 from handler import handle
 from matrix_actions import matrix
 from nextcloud import nextcloud
-
+huolto = False
 MAIN_DOMAIN = config.MAIN_DOMAIN
 MAIN1_DOMAIN = config.MAIN1_DOMAIN
 SECOND_DOMAIN = config.SECOND_DOMAIN
@@ -20,8 +20,11 @@ second = Blueprint('second', __name__)
 second_route = partial(second.route, host=SECOND_DOMAIN)
 third = Blueprint('third', __name__)
 third_route = partial(third.route, host=MAIN1_DOMAIN)
-id = Blueprint('id', __name__)
-id_route = partial(id.route, host=JOIN_DOMAIN)
+
+@app.before_request
+def before():
+	if huolto:
+		return abort(503)
 @app.route('/<language>', host=MAIN_DOMAIN)
 def redirect1(language):
 	if 'matrix' in request.cookies:
@@ -45,6 +48,7 @@ def onetime_verify(language):
 	secret = pyotp.random_base32()
 	totp = pyotp.TOTP(secret)
 	totp = totp.now()
+	alskdlksad = ""
 	f = open(f"{element}_otp.txt", "w")
 	f.write(totp)
 	f.close()
@@ -83,7 +87,7 @@ def upload(language):
 	handle.debug(request)
 	if 'file' not in request.files:
 		flash('No file part')
-		return redirect(request.url)
+		return redirect(MAIN_DOMAIN)
 	element = request.cookies.get('matrix')
 	file = request.files['file']
 	if element.startswith("@"):
@@ -116,7 +120,7 @@ def redirect1(language):
 def select_language():
 	handle.debug(request)
 	return render_template('select.html')
-@third_route("/verify/<language>/", methods=["POST"], host=MAIN_DOMAIN)
+@third_route("/verify/<language>/", methods=["POST"], host=MAIN1_DOMAIN)
 def onetime_verify(language):
 	element = request.form.get("element")
 	handle.debug(request)
@@ -162,7 +166,7 @@ def upload(language):
 	handle.debug(request)
 	if 'file' not in request.files:
 		flash('No file part')
-		return redirect(request.url)
+		return redirect(MAIN_DOMAIN)
 	element = request.cookies.get('matrix')
 	file = request.files['file']
 	if element.startswith("@"):
@@ -222,28 +226,6 @@ def sisainen_post():
 	handle.debug(request)
 	matrix.invite_user_to_rooms(f"@{e_username}:elokapina.fi")
 	return 'thank you'
-@id_route("/signup/")
-def signup_id():
-	return render_template("signup.html")
-@id_route("/signup-1/")
-def signup_id1():
-	return render_template("signup-1.html")
-@id_route("/signup/", methods=["POST"])
-def signup_send():
-	username = request.form.get("username")
-	password = request.form.get("password")
-	secret = request.form.get("secret")
-	if secret == config.create_secret:
-		nextcloud.create_user(username, password)
-		return f"User {username} created with password {password}, you can now sign in at cloud.xrtekstitys.fi."
-	else:
-		return f"Secret {secret} was wrong"
-@id_route("/signup-1/", methods=["POST"])
-def signup_send1():
-	username = request.form.get("username")
-	password = request.form.get("password")
-	matrix.create_user(request)
-	return f"User {username} created with password {password}, and chat.xrtekstitys.fi"
 
 app.register_blueprint(second)
 app.register_blueprint(third)

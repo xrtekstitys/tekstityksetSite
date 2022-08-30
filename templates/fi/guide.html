@@ -1,9 +1,5 @@
-<!doctype html>
-<link rel="icon" type="image/png" sizes="32x32" href="https://elokapina.fi/favicon.png">
-<head>
-<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}"/> 
-<title>Tekstitykset</title>
-</head>
+{% extends "base.html" %}
+{% block content %}
 <h1>
     Ohjeet videoiden lähettämiseksi
 </h1>
@@ -18,4 +14,4 @@ Tarkista että käyttäjänimi on oikein, muuten et saa videon srt tiedostoa,
 <br>
 Lähetä video.
 </h2>
-
+{% endblock %}

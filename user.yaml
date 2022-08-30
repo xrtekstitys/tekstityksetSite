@@ -1,67 +1,70 @@
 Debugger:
   Matrix:
     Enabled:
-      False
+      True
     Room_id:
       ""
 Matrix:
   Server:
     Url:
-      https://matrix.elokapina.fi
+      matrix_url
   User:
     Access_token:
-      
+      matrix_access
 Nextcloud:
   Server:
     Url:
-      randomurl.fi
+      nextcloud_url
   User:
     Username:
-      kissa
+      nextcloud_username
     Password:
-      salainen
+      nextcloud_password
 Website:
   Domains:
     Main_domain:
-      some_domain.fi
+      main_domain
     Second_domain:
-      some_other.fi
+      second_domain
     Register_domain:
-      halloumi.fi
+      register_domain
     Joining_domain:
-      halloo.fi
+      joining_domain
   Rooms:
     Notification:
       ""
     2fa_room:
       name:
-        "Varmennuskoodi tekstitykset.elokapina.fi"
+        ""
     WG:
-      - "!roomid"
+      - ""
+      - ""
+      - ""
+      - ""
   Paths:
     Upload:
-      "UPLOADPATH"
+      ""
     DB:
-      "PICKLEFILEPATH"
+      ""
   Secrets:
     Admin:
       2FA:
-        "2FASECRET"
+        ""
     Account:
       Creating:
         Enabled:
           True
         Token:
-          MATROX ACCOUNT CREATING TOKEN TO MATRIX SERVER
+          token
         Server:
-          "SERVER"
+          ""
         Ending:
-          "matrixending"
+          ""
         Secret:
-          "SALAISUUS"
+          ""
     SSL:
       privkey:
-        'privkey'
+        ''
       pubkey:
-        'pubkey'
+        ''
         

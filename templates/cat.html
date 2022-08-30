@@ -1,0 +1,12 @@
+<!doctype html>
+<style>
+.boxed {
+    border: 5px solid rgb(201, 50, 143) ;
+}
+</style>
+{% for cat in cats: %}
+<div class="boxed">
+    {{ cat }}
+</div>
+<br>
+{% endfor %}

@@ -1,0 +1,13 @@
+{% extends "base.html"%}
+{% block content %}
+<h1 style="font-size: 60px">Duunit</h1>
+<div class="box">
+    {% for work in works %}
+    <div class="box">
+        <p>Duunin nimi: {{work.split(',')[0]}}</p>
+        <h6>Linkki duunin infoon:</h6>
+        <a href="{{work.split(',')[1]}}">{{work.split(',')[1]}}</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

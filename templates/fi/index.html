@@ -1,10 +1,5 @@
-<!doctype html>
-<link rel="icon" type="image/png" sizes="32x32" href="https://elokapina.fi/favicon.png">
-<head>
-<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}"/> 
-<title>Tekstitykset</title>
-</head>
-
+{% extends "base.html" %}
+{% block content %}
 <h1>Lataa video saadaksesi tekstitykset siihen</h1>
 <form method="post" action="/fi" enctype="multipart/form-data">
     <dl>
@@ -26,3 +21,4 @@
 		<input type="submit" class="button" value="lataa palvelimelle">
 	</p>
 </form>
+{% endblock %}

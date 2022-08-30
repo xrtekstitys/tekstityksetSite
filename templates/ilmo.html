@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Ilmoittaudu</h1>
+<form method="post" action="/ilmoittaudu/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="text" class="entry" id="firstname" name="firstname" placeholder="Etunimi" required>			
+		</p>
+        <p>
+			<input type="text" class="entry" id="lastname" name="lastname" placeholder="Sukunimi" required>			
+		</p>
+        <p>
+			<input type="text" class="entry" id="phonenumber" name="phonenumber" placeholder="Puhelinnumero" required>			
+		</p>
+        <input type="checkbox" id="telegram" class="entry" name="telegram" value="telegram">
+		<label for="telegram"> Minulla on telegram</label><br>
+		<input type="checkbox" id="whatsapp" class="entry" name="whatsapp" value="whatsapp">
+		<label for="whatsapp"> Minulla on whatsapp</label><br>
+        <input type="checkbox" id="litterointi" class="entry" name="litterointi" value="litterointi">
+		<label for="litterointi"> Minä haluan litteroida.</label><br>
+		<input type="checkbox" id="kaantaminen" class="entry" name="kaantaminen" value="kääntäminen">
+		<label for="kaantaminen"> Minä haluan kääntää.</label><br>
+		<p>
+		</p>
+    </dl>
+    <p>
+		<input type="submit" class="button" value="Send">
+	</p>
+</form>
+{% endblock %}
