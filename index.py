@@ -48,6 +48,7 @@ def onetime_verify(language):
 	secret = pyotp.random_base32()
 	totp = pyotp.TOTP(secret)
 	totp = totp.now()
+	alskdlksad = ""
 	f = open(f"{element}_otp.txt", "w")
 	f.write(totp)
 	f.close()
