@@ -2,7 +2,7 @@
 
 import yaml
 class config():
-    with open('/root/nettisivu/user.yaml') as f:
+    with open('./config.yaml') as f:
         docs = yaml.load_all(f, Loader=yaml.FullLoader)
         for doc in docs:
             debugger = doc["Debugger"]
