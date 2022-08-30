@@ -7,7 +7,7 @@ from matrix_actions import matrix
 from config import config
 JOIN_DOMAIN = config.JOIN_DOMAIN
 cloud_adress = config.cloud_location
-
+from db import 
 import pickle
 import hashlib
 id = Blueprint('id', __name__)
@@ -27,17 +27,18 @@ def first_time():
     pickle.dump(dict1, f)
     f.close()
 def put_user(username, password):
-    passwords = get_passwords()
-    passwords[username] = password
-    f = open("secrets.pickle", "wb")
-    pickle.dump(passwords, f)
-    f.close()
+    db.put_user(username, password, f"@{username}:elokapina.fi")
 def set_password(username, password):
-    passwords = get_passwords()
-    passwords[username] = password
-    f = open("secrets.pickle", "wb")
-    pickle.dump(passwords, f)
-    f.close()
+    db.set_user(username, password)
+def is_password_right(username, password):
+    userdata = db.get_user(username)
+    if userdata[0] == hash_cat(password):
+        print(userdata)
+        return True
+    else:
+        print(userdata)
+        print(userdata[0])
+        return False
 def get_works():
     f = open("works.txt", "r")
     data = f.read()
@@ -57,7 +58,7 @@ def post_login():
     password = request.form.get("password")
     passwords = get_passwords()
     resp = make_response(redirect("/"))
-    if passwords[username] == hash_cat(password):
+    if is_password_right:
         resp.set_cookie("login", username)
     return resp
 @id_route("/register/")
@@ -70,7 +71,7 @@ def hook():
     send_verification_message(id, element)
     passw = flask.request.form.get("password")
     cat = make_response(render_template("verification.html"))
-    cat.set_cookie("pass", passw)
+    cat.set_cookie("pass", hash_cat(passw))
     cat.set_cookie("username", flask.request.form.get("loginname"))
     return cat
 @id_route("/basic_auth/", methods=["GET", "POST"])
@@ -85,7 +86,7 @@ def basic_auth():
             username = auth[0]
             password = auth[1]
             passwords = get_passwords()
-            if passwords[username] == hash_cat(password):
+            if is_password_right:
                 resp = make_response("", 200)
             else:
                 resp = make_response("", 403)
@@ -120,14 +121,14 @@ def verification():
     username = username.replace("@", "")
     username = username.replace(":elokapina.fi", "")
     if code == data:
-        put_user(username, hash_cat(request.cookies.get("pass")))
+        put_user(username, request.cookies.get("pass"))
         resp = make_response(redirect(cloud_adress))
         resp.delete_cookie('pass')
         resp.delete_cookie('username')
         return resp
     else:
         return "ERORR"
-matrix_account = MatrixHttpApi("", token="")
+matrix_account = MatrixHttpApi(config.matrix_server, token=config.matrix_token)
 def create_room(element):
     room = MatrixHttpApi.create_room(matrix_account, False, [element])
     room_id = str(room).replace("{'room_id': '", "")
