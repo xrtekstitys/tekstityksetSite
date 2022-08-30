@@ -4,14 +4,16 @@ import nextcloud_client
 from api import MatrixHttpApi
 from functools import partial
 from matrix_actions import matrix
-cloud_adress = "" #TODO add this to config
+from config import config
+JOIN_DOMAIN = config.JOIN_DOMAIN
+cloud_adress = config.cloud_location
 
 import pickle
 import hashlib
 id = Blueprint('id', __name__)
 id_route = partial(id.route, host="")
 def hash_cat(cat):
-    hashlib.md5(bytes(cat, 'utf-8')).hexdigest()
+    hashlib.md5(bytes(cat, 'utf-8')).hexdigest() #TODO Add better encryption
     return cat
 import pyotp
 def get_passwords():
