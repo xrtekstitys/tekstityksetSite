@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
+
+{% endblock %}
+{% extends "base.html" %}
+{% block content %}
+{% if language == "FI" %}
 <h1>Ilmoittaudu</h1>
 <form method="post" action="/ilmoittaudu/" enctype="multipart/form-data">
     <dl>
@@ -27,4 +32,11 @@
 		<input type="submit" class="button" value="Send">
 	</p>
 </form>
+{% endif %}
+{% if language == "SE" %}
+
+{% endif %}
+{% if language == "EN" %}
+
+{% endif %}
 {% endblock %}
