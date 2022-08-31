@@ -1,4 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+{% if language == "FI" %}
 <h1> Esimerkki </h1>
+{% endif %}
+{% if language == "EN" %}
+<h1> Example </h1>
+{% endif %}
+{% if language == "SE" %}
+<h1> exempel </h1>
+{% endif %}
 {% endblock %}
