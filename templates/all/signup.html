@@ -1,0 +1,63 @@
+
+{% extends "base.html" %}
+{% block content %}
+<!doctype html>
+
+{% endblock %}
+{% extends "base.html" %}
+{% block content %}
+{% if language == "FI" %}
+<h1>Tee tili</h1>
+<form method="post" action="/register/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="text" class="entry input is-large" id="username" name="loginname" placeholder="Element käyttäjänimi" required>			
+		</p>
+		<br>
+        <p>
+			<input type="text" class="entry input is-large"id="password" name="password" placeholder="Salasana" required>			
+		</p>
+    </dl>
+	<br>
+    <p>
+		<input type="submit" class="button is-large" value="Lähetä">
+	</p>
+</form>
+{% endif %}
+{% if language == "SE" %}
+<h1>Skapa ett konto</h1>
+<form method="post" action="/register/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="text" class="entry input is-large" id="username" name="loginname" placeholder="Element Användarnamn" required>			
+		</p>
+		<br>
+        <p>
+			<input type="text" class="entry input is-large"id="password" name="password" placeholder="Lösenord" required>			
+		</p>
+    </dl>
+	<br>
+    <p>
+		<input type="submit" class="button is-large" value="Skicka">
+	</p>
+</form>
+{% endif %}
+{% if language == "EN" %}
+<h1>Create account</h1>
+<form method="post" action="/register/" enctype="multipart/form-data">
+    <dl>
+		<p>
+			<input type="text" class="entry input is-large" id="username" name="loginname" placeholder="Element username" required>			
+		</p>
+		<br>
+        <p>
+			<input type="text" class="entry input is-large"id="password" name="password" placeholder="password" required>			
+		</p>
+    </dl>
+	<br>
+    <p>
+		<input type="submit" class="button is-large" value="Send">
+	</p>
+</form>
+{% endif %}
+{% endblock %}
