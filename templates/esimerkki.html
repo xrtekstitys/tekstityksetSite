@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+<!-- block content on tärkeä, koska muuten sivu ei näy-->
+{% block content %}
+<!-- Jos kieli on "FI", niin näytä "<h1> Esimerkki </h1>"-->
+{% if language == "FI" %}
+<h1> Esimerkki </h1>
+{% endif %}
+<!-- Jos kieli on "EN", niin näytä "<h1> Example </h1>"-->
+{% if language == "EN" %}
+<h1> Example </h1>
+{% endif %}
+<!-- Jos kieli on "SE", niin näytä "<h1> exempel </h1>"-->
+{% if language == "SE" %}
+<h1> exempel </h1>
+{% endif %}
+{% endblock %}
+<!-- endblock on tärkeä, ilman sitä ohjelma luulee, että koodi jatkuu vielä-->

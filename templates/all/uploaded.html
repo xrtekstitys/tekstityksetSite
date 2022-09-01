@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+{% if language == "FI" %}
+<h1>Video on onnistuneesti ladattu palvelimelle.</h1>
+{% endif %}
+{% if language == "SE" %}
+<h1>Videon har laddats upp till servern.</h1>
+{% endif %}
+{% if language == "EN" %}
+<h1>The video has been successfully uploaded to the server.</h1>
+{% endif %}
+{% endblock %}
