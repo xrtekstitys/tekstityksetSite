@@ -7,7 +7,12 @@ from matrix_actions import matrix
 from config import config
 JOIN_DOMAIN = config.JOIN_DOMAIN
 cloud_adress = config.cloud_location
-
+def get_language(request):
+	if 'language' in request.cookies:
+		language = request.cookies.get("language")
+		return language
+	else:
+		return "EN"
 import pickle
 import hashlib
 id = Blueprint('id', __name__)
@@ -69,7 +74,7 @@ def hook():
     id = create_room(element)
     send_verification_message(id, element)
     passw = flask.request.form.get("password")
-    cat = make_response(render_template("verification.html"))
+    cat = make_response(render_template("verification.html", language=get_language(request)))
     cat.set_cookie("pass", passw)
     cat.set_cookie("username", flask.request.form.get("loginname"))
     return cat
@@ -147,13 +152,4 @@ def send_message(room_id, message):
     return "OK"
 @id_route("/signup/")
 def signup_id():
-	return render_template("signup.html")
-@id_route("/signup-1/")
-def signup_id1():
-	return render_template("signup-1.html")
-@id_route("/signup-1/", methods=["POST"])
-def signup_send1():
-	username = request.form.get("username")
-	password = request.form.get("password")
-	matrix.create_user(request)
-	return f"User {username} created with password {password}, chat.xrtekstitys.fi"
+	return render_template("signup.html", language=get_language(request))
