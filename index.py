@@ -3,6 +3,7 @@ from functools import partial
 import pyotp
 from flask import (Blueprint, Flask, flash, make_response, redirect,
                    render_template, request, abort)
+from auth import auth
 from werkzeug.utils import secure_filename
 from id import id_route, id
 from config import config
@@ -22,17 +23,27 @@ third_route = partial(third.route, host=MAIN1_DOMAIN)
 def before():
 	if huolto:
 		return abort(503)
-@app.route('/<language>', host=MAIN_DOMAIN)
-def redirect1(language):
-	if 'matrix' in request.cookies:
-		return render_template(f'{language}/index.html')
+@app.route('/select_language/', methods=["GET", "POST"])
+def select_language():
+	if request.method == "GET":
+		return render_template("all/select.html")
 	else:
-		languages = ["fi", "en", "se"]
-		if language in languages:
-			handle.debug(request)
-			return render_template(f'{language}/verify_1.html')
+		language = request.form.get("language")
+		resp = make_response(redirect("https://tekstitykset.elokapina.fi/"))
+		resp.set_cookie('language', language)
+		return resp
+@app.route('/', host=MAIN_DOMAIN)
+def redirect1():
+	if auth.check_auth(request):
+		if 'language' in request.cookies:
+			return render_template('/index.html', language=language)
 		else:
-			return render_template("select.html")
+			return render_template(
+	else:
+		if 'language' in request.cookies:
+			return render_template('all/verify_1.html', language=language)
+		else:
+			return redirect(app.select_language)
 @app.route('/', host=MAIN_DOMAIN)
 def select_language():
 	handle.debug(request)
