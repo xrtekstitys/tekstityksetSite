@@ -7,7 +7,7 @@ from matrix_actions import matrix
 from config import config
 JOIN_DOMAIN = config.JOIN_DOMAIN
 cloud_adress = config.cloud_location
-from db import 
+from db import
 import pickle
 import hashlib
 id = Blueprint('id', __name__)
@@ -16,16 +16,6 @@ def hash_cat(cat):
     hashlib.md5(bytes(cat, 'utf-8')).hexdigest() #TODO Add better encryption
     return cat
 import pyotp
-def get_passwords():
-    f = open("secrets.pickle", "rb")
-    passwords = pickle.load(f)
-    f.close()
-    return passwords
-def first_time():
-    f = open("secrets.pickle", "wb")
-    dict1 = {}
-    pickle.dump(dict1, f)
-    f.close()
 def put_user(username, password):
     db.put_user(username, password, f"@{username}:elokapina.fi")
 def set_password(username, password):
@@ -45,10 +35,6 @@ def get_works():
     f.close()
     data = data.split(";")
     return data
-f = open("ft.txt", "r")
-if f.read() == "NO":
-    first_time()
-f.close()
 @id_route("/login/")
 def login():
     return render_template("login.html")
@@ -149,12 +135,3 @@ def send_message(room_id, message):
 @id_route("/signup/")
 def signup_id():
 	return render_template("signup.html")
-@id_route("/signup-1/")
-def signup_id1():
-	return render_template("signup-1.html")
-@id_route("/signup-1/", methods=["POST"])
-def signup_send1():
-	username = request.form.get("username")
-	password = request.form.get("password")
-	matrix.create_user(request)
-	return f"User {username} created with password {password}, chat.xrtekstitys.fi"
