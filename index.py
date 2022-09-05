@@ -5,6 +5,7 @@ from flask import (Blueprint, Flask, flash, make_response, redirect,
 from auth import auth
 from werkzeug.utils import secure_filename
 from id import id_route, id
+from transfer_data import transfer
 from config import config
 from data import data, texts
 from handler import handle
@@ -23,21 +24,25 @@ def get_language(request):
 		return language
 	else:
 		return "EN"
-@app.before_request
+@app.before_request # Suoritetaan aina ennen pyyntöön vastaamista
 def before():
 	handle.debug(request)
 	if huolto:
 		return abort(503)
 @app.route('/select_language/', methods=["GET", "POST"])
-def select_language():
-	if request.method == "GET":
-		return render_template("all/select.html")
-	else:
-		resp = make_response(redirect("https://tekstitykset.elokapina.fi/"))
+def select_language(): # Toiminto on kielen valitsemista varten
+	if request.method == "GET": # Jos pyyntö on HTTP GET pyyntö
+		return render_template("all/select.html") # Renderöi all/select.html
+	else: # Jos pyyntö ei ole HTTP GET pyyntö
+		resp = make_response(redirect("https://tekstitykset.elokapina.fi/")) # Uudelleen ohjaa osoitteeseen https://tekstitykset.elokapina.fi/
 		resp.set_cookie('language', language)
 		return resp
 @app.route('/', host=MAIN_DOMAIN)
 def main():
+	"""
+	Jos pyyntö on varmennettu, palautetaan videon lataus sivu.
+	Jos pyyntöä ei ole varmennettu, palautetaan varmennussivu.
+	"""
 	if auth.check_auth(request):
 		return render_template('all/index.html', language=get_language(request))
 	else:
@@ -49,13 +54,14 @@ def onetime_verify():
 	secret = pyotp.random_base32()
 	totp = pyotp.TOTP(secret)
 	totp = totp.now()
+	filename = secure_filename(f"{element}_otp.txt")
 	if element.startswith("@"):
 		if element.endswith(":elokapina.fi"):
-			f = open(f"{element}_otp.txt", "w")
+			f = open(filename, "w")
 			f.write(totp)
 			f.close()
 		elif element.endswith(":matrix.org"):
-			f = open(f"{element}_otp.txt", "w")
+			f = open(filename, "w")
 			f.write(totp)
 			f.close()
 		else:
@@ -68,16 +74,15 @@ def onetime_verify():
 	return resp
 @app.route("/verify_final/", methods=["POST"], host=MAIN_DOMAIN)
 def onetime_verify1():
+	"""
+	
+	"""
 	element = request.cookies.get('matrix1')
 	otp = request.form.get("totp_send")
-	f = open(f"{element}_otp.txt", "r")
-	totp = f.read()
-	f.close()
+	totp = transfer.things(f"{element}_otp", "r") # 
 	tot1 = pyotp.TOTP(config.admin_2fa)
 	if otp == totp:
-		f = open(f"{element}_otp.txt", "w")
-		f.write("")
-		f.close()
+		transfer.things(f"{element}_otp", "w", data="")
 		resp = make_response(render_template(f"all/index.html", language=get_language(request)))
 		resp.set_cookie('matrix', element)
 		return resp
@@ -85,6 +90,7 @@ def onetime_verify1():
 		return render_template("admin.html")
 	else:
 		return render_template(f'all/verify.html', language=get_language(request))
+
 @app.route("/", methods=["POST"], host=MAIN_DOMAIN)
 def upload():
 	element = request.cookies.get('matrix1')
@@ -99,7 +105,6 @@ def upload():
 		data.save_video_info(filename, request)
 		nextcloud.upload_file(f"/videot-infot/{filename}", f"static/uploads/{filename}")
 		nextcloud.upload_file(f"/videot-infot/{filename}_info.txt", f"{filename}.txt")
-		
 		link_info = nextcloud.share_link(f"/videot-infot/{filename}")
 		matrix.send_message(config.room_id, texts.new_video(link_info))
 		return render_template(f'all/uploaded.html', language=get_language(request))
