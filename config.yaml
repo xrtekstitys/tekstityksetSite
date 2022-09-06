@@ -4,6 +4,16 @@ Debugger:
       True
     Room_id:
       ""
+  Testmode:
+    Enabled:
+      False
+    Allowed_ip_list:
+      - 1.1.1.1
+  Maintance:
+    Enabled:
+      False
+    Allowed_ip_list:
+      - 1.1.1.1
 Matrix:
   Server:
     Url:
