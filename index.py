@@ -54,7 +54,7 @@ def select_language(): # Toiminto on kielen valitsemista varten
 @app1.route('/', host=MAIN1_DOMAIN)
 @app.route('/', host=MAIN_DOMAIN)
 def main():
-	if auth.check_auth(request):
+	if auth.check_auth(request): # Jos käyttäjä on jo varmennettu aiemmin, ohjaa suoraan videon lataamiseen
 		return render_template('all/index.html', language=get_language(request))
 	else:
 		return render_template('all/verify_1.html', language=get_language(request))
@@ -62,7 +62,7 @@ def main():
 @app.route("/", methods=["POST"], host=MAIN_DOMAIN)
 def upload():
 	element = request.cookies.get('matrix1')
-	if 'file' not in request.files:
+	if 'file' not in request.files: # Jos ei tiedostoja
 		flash('No file part')
 		return redirect(MAIN_DOMAIN)
 	element = request.cookies.get('matrix')
