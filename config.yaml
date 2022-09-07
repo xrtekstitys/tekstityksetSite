@@ -9,6 +9,14 @@ Debugger:
       False
     Allowed_ip_list:
       - 1.1.1.1
+    Main_domain:
+      main_domain
+    Second_domain:
+      second_domain
+    Register_domain:
+      register_domain
+    Joining_domain:
+      joining_domain
   Maintance:
     Enabled:
       False

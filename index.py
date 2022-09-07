@@ -12,8 +12,12 @@ from handler import handle
 from matrix_actions import matrix
 from nextcloud import nextcloud
 from second import second
-MAIN_DOMAIN = config.MAIN_DOMAIN
-MAIN1_DOMAIN = config.MAIN1_DOMAIN
+if config.testmode_true == True:
+	MAIN_DOMAIN = config.TEST_MAIN_DOMAIN
+	MAIN1_DOMAIN = config.TEST_MAIN1_DOMAIN
+else:
+	MAIN_DOMAIN = config.MAIN_DOMAIN
+	MAIN1_DOMAIN = config.MAIN1_DOMAIN
 app = Flask(__name__, host_matching=True, static_host=MAIN_DOMAIN)
 app1 = Blueprint('app1', __name__)
 def securate(thing):
@@ -34,7 +38,7 @@ def before():
 	handle.debug(request)
 	if config.testmode_true == True or config.maintanence_true == True:
 		if request.remote_addr in uptimerobot_ips or request.remote_addr in config.testmode_ips or request.remote_addr in config.maintanence_ips:
-			app.logger.info("Letter user in, because user is from us or uptimerobot")
+			app.logger.info("Letted user in, because user is from us or uptimerobot")
 		else:
 			abort(503)
 @app1.route('/select_language/', methods=["GET", "POST"], host=MAIN1_DOMAIN)
@@ -124,4 +128,7 @@ app.register_blueprint(third)
 app.register_blueprint(id)
 
 if __name__ == '__main__':
-    app.run(host=MAIN_DOMAIN, port=443, debug=False, threaded=True,ssl_context=config.ssl)
+	if config.testmode_true == True:
+    	app.run(host=TEST_MAIN_DOMAIN, port=443, debug=True, threaded=True,ssl_context=config.ssl)
+	else:
+		app.run(host=MAIN_DOMAIN, port=443, debug=False, threaded=True,ssl_context=config.ssl)

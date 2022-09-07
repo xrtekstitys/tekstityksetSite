@@ -27,3 +27,7 @@ class config():
     maintanence = debugger.maintanence
     maintanence_true = maintanence.maintanence_true
     maintanence_ips = maintanence.maintanence_ips
+    TEST_MAIN_DOMAIN = testmode.test_main_domain
+    TEST_MAIN1_DOMAIN = testmode.test_second_domain
+    TEST_SECOND_DOMAIN = testmode.test_register_domain
+    TEST_JOIN_DOMAIN = testmode.test_join_domain
