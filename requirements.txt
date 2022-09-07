@@ -13,3 +13,4 @@ hashlib
 pickle
 nextcloud_client
 yaml
+sqlite3
