@@ -1,7 +1,7 @@
 Debugger:
   Matrix:
     Enabled:
-      True
+      False
     Room_id:
       ""
   Testmode:
@@ -25,19 +25,19 @@ Debugger:
 Matrix:
   Server:
     Url:
-      matrix_url
+      matrix_url # Adress of matrix instance
   User:
     Access_token:
-      matrix_access
+      matrix_access # Matrix token
 Nextcloud:
   Server:
     Url:
-      nextcloud_url
+      nextcloud_url # Adress of nextcloud instance
   User:
     Username:
-      nextcloud_username
+      nextcloud_username # Nextcloud admin username
     Password:
-      nextcloud_password
+      nextcloud_password # Nextcloud admin password
 Website:
   Domains:
     Main_domain:
@@ -54,10 +54,7 @@ Website:
     2fa_room:
       name:
         ""
-    WG:
-      - ""
-      - ""
-      - ""
+    WG: # List of roomids that user is invited when joining
       - ""
   Paths:
     Upload:
@@ -71,7 +68,7 @@ Website:
     Account:
       Creating:
         Enabled:
-          True
+          False
         Token:
           token
         Server:
