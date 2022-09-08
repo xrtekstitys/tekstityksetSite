@@ -45,7 +45,7 @@ def upload():
 		return redirect(MAIN_DOMAIN)
 	element = request.cookies.get('matrix')
 	file = request.files['file']
-	if element.startswith("@"):
+	if element.startswith("@"): # Validoi käyttäjänimi
 		filename = secure_filename(file.filename)
 		data.save_video(file)
 		data.save_video_info(filename, request)
@@ -54,7 +54,7 @@ def upload():
 		link_info = nextcloud.share_link(f"/videot-infot/{filename}")
 		matrix.send_message(config.room_id, texts.new_video(link_info))
 		return render_template(f'all/uploaded.html', language=get_language(request))
-	else:
+	else: # Jos käyttäjänimen validointi epäonnistuu
 		return 'invalid element username'
 @app1.route("/verify/", methods=["POST"], host=MAIN1_DOMAIN)
 @app2.route("/verify/", methods=["POST"], host=MAIN_DOMAIN)
@@ -87,12 +87,12 @@ def onetime_verify1():
 	element = request.cookies.get('matrix1')
 	otp = request.form.get("totp_send")
 	f = open(f"{securate(element)}_otp.txt", "r")
-	totp = f.read()
+	totp = f.read() # Lue TOTP koodi tiedostosta
 	f.close()
 	tot1 = pyotp.TOTP(config.admin_2fa)
 	if otp == totp:
 		f = open(f"{securate(element)}_otp.txt", "w")
-		f.write("")
+		f.write("") # Poista TOTP koodi
 		f.close()
 		resp = make_response(render_template(f"all/index.html", language=get_language(request)))
 		resp.set_cookie('matrix', element)
