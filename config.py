@@ -21,3 +21,13 @@ class config():
     create_account_auth_token = website.account_creating_token
     create_account_server_url = website.account_creating_server
     create_account_server_ending = website.account_creating_ending
+    testmode = debugger.testmode
+    testmode_true = testmode.testmode_true
+    testmode_ips = testmode.testmode_ips
+    maintanence = debugger.maintanence
+    maintanence_true = maintanence.maintanence_true
+    maintanence_ips = maintanence.maintanence_ips
+    TEST_MAIN_DOMAIN = testmode.test_main_domain
+    TEST_MAIN1_DOMAIN = testmode.test_second_domain
+    TEST_SECOND_DOMAIN = testmode.test_register_domain
+    TEST_JOIN_DOMAIN = testmode.test_join_domain

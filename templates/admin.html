@@ -1,8 +1,6 @@
-<!doctype html>
-<head>
-<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}"/> 
-<title>Tekstitykset</title>
-</head>
+<!-- #13 -->
+{% extends "base.html" %}
+{% block content %}
 <h1>Tee tili itsellesi.</h1>
 <form method="post" action="/create/" enctype="multipart/form-data">
     <dl>
@@ -22,3 +20,4 @@
 		<input type="submit" class="button" value="Send">
 	</p>
 </form>
+{% endblock %}

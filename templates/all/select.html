@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>
+    Valitse kieli
+</h1>
+<form action="/select_language/">
+    <input type="hidden" id="language" name="language" value="FI">
+    <input type="submit" class="button" value="Suomi" />
+</form>
+<h1>
+    Välj språk
+</h1>
+<form action="/select_language/">
+    <input type="hidden" id="language" name="language" value="SE">
+    <input type="submit" class="button" value="svenska" />
+</form>
+<h1>
+    Select language
+</h1>
+<form action="/select_language/">
+    <input type="hidden" id="language" name="language" value="EN">
+    <input type="submit" class="button" value="English" />
+</form>
+{% endblock %}

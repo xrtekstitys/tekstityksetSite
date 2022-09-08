@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+{% if language == "FI" %}
+<form action="/verification/" method="post">
+  <label for="code">Syötä koodi, jonka vastaanotit elementissä:</label><br>
+  <input class="input is-large" type="text" id="code" name="code" placeholder="Koodi jonka vastaanotit elementissä"><br>
+  <br>
+  <input class="button is-large" type="submit" value="Submit">
+</form> 
+{% endif %}
+{% if language == "SE" %}
+<form action="/verification/" method="post">
+  <label for="code">Ge koden, som du fick via element</label><br>
+  <input class="input is-large" type="text" id="code" name="code" placeholder="Ge koden, som du fick via element"><br>
+  <br>
+  <input class="button is-large" type="submit" value="Submit">
+</form>
+{% endif %}
+{% if language == "EN" %}
+<form action="/verification/" method="post">
+    <label for="code">Code you received at element:</label><br>
+    <input class="input is-large" type="text" id="code" name="code" placeholder="Code you received at element"><br>
+    <br>
+    <input class="button is-large" type="submit" value="Submit">
+  </form> 
+{% endif %}
+{% endblock %}

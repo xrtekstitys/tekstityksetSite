@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+{% if language == "FI" %}
+<h1>Tunnuksesi ovat:</h1>
+<h2>Salasana: {{% salasana %}}</h2>
+<h2>Käyttäjänimi: {{% kauttis %}}</h2>
+{% endif %}
+{% if language == "SE" %}
+<h1>Dina inloggningsuppgifter:</h1>
+<h2>Lösenord: {{% salasana %}}</h2>
+<h2>Användarnamn: {{% kauttis %}}</h2>
+{% endif %}
+{% if language == "EN" %}
+<h1>Your login details are:</h1>
+<h2>Password: {{% salasana %}}</h2>
+<h2>Username: {{% kauttis %}}</h2>
+{% endif %}
+{% endblock %}

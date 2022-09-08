@@ -1,192 +1,134 @@
 from functools import partial
-
 import pyotp
 from flask import (Blueprint, Flask, flash, make_response, redirect,
                    render_template, request, abort)
+from auth import auth
 from werkzeug.utils import secure_filename
 from id import id_route, id
+from transfer_data import transfer
 from config import config
 from data import data, texts
 from handler import handle
 from matrix_actions import matrix
 from nextcloud import nextcloud
 from second import second
-huolto = False
-MAIN_DOMAIN = config.MAIN_DOMAIN
-MAIN1_DOMAIN = config.MAIN1_DOMAIN
+if config.testmode_true == True:
+	MAIN_DOMAIN = config.TEST_MAIN_DOMAIN
+	MAIN1_DOMAIN = config.TEST_MAIN1_DOMAIN
+else:
+	MAIN_DOMAIN = config.MAIN_DOMAIN
+	MAIN1_DOMAIN = config.MAIN1_DOMAIN
 app = Flask(__name__, host_matching=True, static_host=MAIN_DOMAIN)
-third = Blueprint('third', __name__)
-third_route = partial(third.route, host=MAIN1_DOMAIN)
-
-@app.before_request
+app1 = Blueprint('app1', __name__)
+def securate(thing):
+	return secure_filename(thing)
+def get_language(request):
+	if 'language' in request.cookies:
+		language = request.cookies.get("language")
+		return language
+	else:
+		return "EN"
+@app.before_first_request
+def before_first_request():
+	response = requests.get("https://uptimerobot.com/inc/files/ips/IPv4.txt")
+	uptimerobot_ips = response.content
+	app.logger.debug('Initializin uptimerobot ips')
+@app.before_request # Suoritetaan aina ennen pyyntöön vastaamista
 def before():
-	if huolto:
-		return abort(503)
-@app.route('/<language>', host=MAIN_DOMAIN)
-def redirect1(language):
-	if 'matrix' in request.cookies:
-		return render_template(f'{language}/index.html')
-	else:
-		languages = ["fi", "en", "se"]
-		if language in languages:
-			handle.debug(request)
-			return render_template(f'{language}/verify_1.html')
+	handle.debug(request)
+	if config.testmode_true == True or config.maintanence_true == True:
+		if request.remote_addr in uptimerobot_ips or request.remote_addr in config.testmode_ips or request.remote_addr in config.maintanence_ips:
+			app.logger.info("Letted user in, because user is from us or uptimerobot")
 		else:
-			return render_template("select.html")
+			abort(503)
+@app1.route('/select_language/', methods=["GET", "POST"], host=MAIN1_DOMAIN)
+@app.route('/select_language/', methods=["GET", "POST"])
+def select_language(): # Toiminto on kielen valitsemista varten
+	if request.method == "GET": # Jos pyyntö on HTTP GET pyyntö
+		return render_template("all/select.html") # Renderöi all/select.html
+	else: # Jos pyyntö ei ole HTTP GET pyyntö
+		resp = make_response(redirect(request.host)) # Uudelleen ohjaa pyynnön domainiin
+		resp.set_cookie('language', language)
+		return resp
+
+@app1.route('/', host=MAIN1_DOMAIN)
 @app.route('/', host=MAIN_DOMAIN)
-def select_language():
-	handle.debug(request)
-	return render_template('select.html')
-@app.route("/verify/<language>/", methods=["POST"], host=MAIN_DOMAIN)
-def onetime_verify(language):
-	element = request.form.get("element")
-	handle.debug(request)
-	room_id = data.pickles(request)
-	secret = pyotp.random_base32()
-	totp = pyotp.TOTP(secret)
-	totp = totp.now()
-	alskdlksad = ""
-	f = open(f"{element}_otp.txt", "w")
-	f.write(totp)
-	f.close()
-	matrix.send_message(room_id, f"Varmennuskoodisi sivustolle tekstitykset.elokapina.fi on: {totp}")
-	resp = make_response(render_template(f"{language}/verify.html"))
-	resp.set_cookie('matrix1', element)
-	return resp
-@app.route("/verify_final/<language>/", methods=["POST"], host=MAIN_DOMAIN)
-def onetime_verify1(language):
-	element = request.cookies.get('matrix1')
-	otp = request.form.get("totp_send")
-	handle.debug(request)
-	f = open(f"{element}_otp.txt", "r")
-	totp = f.read()
-	f.close()
-	tot1 = pyotp.TOTP(config.admin_2fa)
-	if otp == totp:
-		handle.debug(request)
-		f = open(f"{element}_otp.txt", "w")
-		f.write("")
-		f.close()
-		resp = make_response(render_template(f"{language}/index.html"))
-		resp.set_cookie('matrix', element)
-		datas = f"{request.remote_addr} with element {element} approved reason: right 2fa code"
-		handle.extra_debug(datas)
-		return resp
-	elif otp == tot1.now():
-		handle.debug(request)
-		return render_template("admin.html")
+def main():
+	if auth.check_auth(request): # Jos käyttäjä on jo varmennettu aiemmin, ohjaa suoraan videon lataamiseen
+		return render_template('all/index.html', language=get_language(request))
 	else:
-		handle.debug(request)
-		return render_template(f'{language}/verify.html')
-@app.route("/<language>", methods=["POST"], host=MAIN_DOMAIN)
-def upload(language):
+		return render_template('all/verify_1.html', language=get_language(request))
+@app1.route("/", methods=["POST"], host=MAIN1_DOMAIN)
+@app.route("/", methods=["POST"], host=MAIN_DOMAIN)
+def upload():
 	element = request.cookies.get('matrix1')
-	handle.debug(request)
-	if 'file' not in request.files:
+	if 'file' not in request.files: # Jos ei tiedostoja
 		flash('No file part')
 		return redirect(MAIN_DOMAIN)
 	element = request.cookies.get('matrix')
 	file = request.files['file']
 	if element.startswith("@"):
-		handle.debug(request)
 		filename = secure_filename(file.filename)
 		data.save_video(file)
 		data.save_video_info(filename, request)
 		nextcloud.upload_file(f"/videot-infot/{filename}", f"static/uploads/{filename}")
 		nextcloud.upload_file(f"/videot-infot/{filename}_info.txt", f"{filename}.txt")
-		datas = f"{element} video uploaded to nextcloud"
-		handle.extra_debug(datas)
 		link_info = nextcloud.share_link(f"/videot-infot/{filename}")
 		matrix.send_message(config.room_id, texts.new_video(link_info))
-		handle.debug(request)
-		return render_template(f'{language}/uploaded.html')
+		return render_template(f'all/uploaded.html', language=get_language(request))
 	else:
 		return 'invalid element username'
-@third_route('/<language>')
-def redirect1(language):
-	if 'matrix' in request.cookies:
-		return render_template(f'{language}/index.html')
-	else:
-		languages = ["fi", "en", "se"]
-		if language in languages:
-			handle.debug(request)
-			return render_template(f'{language}/verify_1.html')
+@app1.route("/verify/", methods=["POST"], host=MAIN1_DOMAIN)
+@app.route("/verify/", methods=["POST"], host=MAIN_DOMAIN)
+def onetime_verify():
+	element = request.form.get("element")
+	room_id = data.pickles(request)
+	secret = pyotp.random_base32()
+	totp = pyotp.TOTP(secret)
+	totp = totp.now()
+	if element.startswith("@"):
+		if element.endswith(":elokapina.fi"):
+			f = open(f"{securate(element)}_otp.txt", "w")
+			f.write(totp)
+			f.close()
+		elif element.endswith(":matrix.org"):
+			f = open(f"{securate(element)}_otp.txt", "w")
+			f.write(totp)
+			f.close()
 		else:
-			return render_template("select.html")
-@third_route('/')
-def select_language():
-	handle.debug(request)
-	return render_template('select.html')
-@third_route("/verify/<language>/", methods=["POST"], host=MAIN1_DOMAIN)
-def onetime_verify(language):
-	element = request.form.get("element")
-	handle.debug(request)
-	room_id = data.pickles(request)
-	secret = pyotp.random_base32()
-	totp = pyotp.TOTP(secret)
-	totp = totp.now()
-	f = open(f"{element}_otp.txt", "w")
-	f.write(totp)
-	f.close()
-	matrix.send_message(room_id, f"Varmennuskoodisi sivustolle tekstitykset.elokapina.fi on: {totp}")
-	resp = make_response(render_template(f"{language}/verify.html"))
+			abort(403)
+	else:
+		abort(500)
+	matrix.send_message(room_id, f"Varmennuskoodisi sivustolle {request.host} on: {totp}")
+	resp = make_response(render_template(f"all/verify.html", language=get_language(request)))
 	resp.set_cookie('matrix1', element)
 	return resp
-@third_route("/verify_final/<language>/", methods=["POST"])
-def onetime_verify1(language):
+@app1.route("/verify_final/", methods=["POST"], host=MAIN1_DOMAIN)
+@app.route("/verify_final/", methods=["POST"], host=MAIN_DOMAIN)
+def onetime_verify1():
 	element = request.cookies.get('matrix1')
 	otp = request.form.get("totp_send")
-	handle.debug(request)
-	f = open(f"{element}_otp.txt", "r")
+	f = open(f"{securate(element)}_otp.txt", "r")
 	totp = f.read()
 	f.close()
 	tot1 = pyotp.TOTP(config.admin_2fa)
 	if otp == totp:
-		handle.debug(request)
-		f = open(f"{element}_otp.txt", "w")
+		f = open(f"{securate(element)}_otp.txt", "w")
 		f.write("")
 		f.close()
-		resp = make_response(render_template(f"{language}/index.html"))
+		resp = make_response(render_template(f"all/index.html", language=get_language(request)))
 		resp.set_cookie('matrix', element)
-		datas = f"{request.remote_addr} with element {element} approved reason: right 2fa code"
-		handle.extra_debug(datas)
 		return resp
 	elif otp == tot1.now():
-		handle.debug(request)
 		return render_template("admin.html")
 	else:
-		handle.debug(request)
-		return render_template(f'{language}/verify.html')
-@third_route("/<language>", methods=["POST"])
-def upload(language):
-	element = request.cookies.get('matrix1')
-	handle.debug(request)
-	if 'file' not in request.files:
-		flash('No file part')
-		return redirect(MAIN_DOMAIN)
-	element = request.cookies.get('matrix')
-	file = request.files['file']
-	if element.startswith("@"):
-		handle.debug(request)
-		filename = secure_filename(file.filename)
-		data.save_video(file)
-		data.save_video_info(filename, request)
-		nextcloud.upload_file(f"/videot-infot/{filename}", f"static/uploads/{filename}")
-		nextcloud.upload_file(f"/videot-infot/{filename}_info.txt", f"{filename}.txt")
-		datas = f"{element} video uploaded to nextcloud"
-		handle.extra_debug(datas)
-		link_info = nextcloud.share_link(f"/videot-infot/{filename}")
-		matrix.send_message(config.room_id, texts.new_video(link_info))
-		flash('Video successfully uploaded') 
-		handle.debug(request)
-		return render_template(f'{language}/uploaded.html')
-	else:
-		return 'invalid element username'
-
-
+		return render_template(f'all/verify.html', language=get_language(request))
 app.register_blueprint(second)
 app.register_blueprint(third)
 app.register_blueprint(id)
 
 if __name__ == '__main__':
-    app.run(host=MAIN_DOMAIN, port=443, debug=False, threaded=True,ssl_context=config.ssl)
+	if config.testmode_true == True:
+    	app.run(host=TEST_MAIN_DOMAIN, port=443, debug=True, threaded=True,ssl_context=config.ssl)
+	else:
+		app.run(host=MAIN_DOMAIN, port=443, debug=False, threaded=True,ssl_context=config.ssl)
