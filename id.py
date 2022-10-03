@@ -1,6 +1,7 @@
 import flask
 from flask import make_response, render_template, redirect, request, Blueprint
 import nextcloud_client
+import pyotp
 from api import MatrixHttpApi
 from functools import partial
 from matrix_actions import matrix
@@ -10,21 +11,23 @@ from config import (
     MATRIX_SERVER, 
     MATRIX_TOKEN)
 cloud_adress = CLOUD_LOCATION
+
+from db import db
+import pickle
+import hashlib
+id = Blueprint('id', __name__)
+id_route = partial(id.route, host="")
 def get_language(request):
 	if 'language' in request.cookies:
 		language = request.cookies.get("language")
 		return language
 	else:
 		return "EN"
-from db import db
-import pickle
-import hashlib
-id = Blueprint('id', __name__)
-id_route = partial(id.route, host="")
+
 def hash_cat(cat):
-    hashlib.md5(bytes(cat, 'utf-8')).hexdigest() #TODO Add better encryption
+    hashlib.md5(bytes(cat, 'utf-8')).hexdigest() #TODO #23 Add better encryption
     return cat
-import pyotp
+
 def put_user(username, password):
     db.put_user(username, password, f"@{username}:elokapina.fi")
 def set_password(username, password):
