@@ -51,9 +51,8 @@ def login():
 def post_login():
     username = request.form.get("username")
     password = request.form.get("password")
-    passwords = get_passwords()
     resp = make_response(redirect("/"))
-    if is_password_right:
+    if is_password_right(username, password):
         resp.set_cookie("login", username)
     return resp
 @id_route("/register/")
@@ -80,8 +79,7 @@ def basic_auth():
             auth = auth.split(":")
             username = auth[0]
             password = auth[1]
-            passwords = get_passwords()
-            if is_password_right:
+            if is_password_right(username, password):
                 resp = make_response("", 200)
             else:
                 resp = make_response("", 403)
