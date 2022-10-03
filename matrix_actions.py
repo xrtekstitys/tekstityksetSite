@@ -1,9 +1,15 @@
 from api import MatrixHttpApi
-from config import config
+from config import (
+    MATRIX_SERVER, 
+    MATRIX_TOKEN, 
+    ROOMS, 
+    CREATE_ACCOUNT_SERVER_URL, 
+    CREATE_ACCOUNT_SERVER_ENDING, 
+    CREATE_ACCOUNT_AUTH_TOKEN)
 import requests
 import json
 class matrix():
-    matrix_account = MatrixHttpApi(config.matrix_server, token=config.matrix_token)
+    matrix_account = MatrixHttpApi(MATRIX_SERVER, token=MATRIX_TOKEN)
     def create_room(element):
         room = MatrixHttpApi.create_room(matrix.matrix_account, False, [element])
         room_id = str(room).replace("{'room_id': '", "")
@@ -26,7 +32,7 @@ class matrix():
     def create_user(request):
         username = request.form.get("username")
         password = request.form.get("password")
-        url = f"{config.create_account_server_url}/_synapse/admin/v2/users/@{username}:{config.create_account_server_ending}"
+        url = f"{CREATE_ACCOUNT_SERVER_URL}/_synapse/admin/v2/users/@{username}:{CREATE_ACCOUNT_SERVER_ENDING}"
         payload = json.dumps({
         "password": f"{password}",
         "admin": False,
@@ -34,7 +40,7 @@ class matrix():
         "user_type": None
         })
         headers = {
-        'Authorization': f'Bearer {config.create_account_auth_token}',
+        'Authorization': f'Bearer {CREATE_ACCOUNT_AUTH_TOKEN}',
         'Content-Type': 'application/json'
         }
 

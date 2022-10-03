@@ -5,7 +5,7 @@ from flask import (Blueprint, flash, make_response, redirect,
 from auth import auth
 from werkzeug.utils import secure_filename
 from transfer_data import transfer
-from config import config
+from config import (ROOM_ID, ADMIN_2FA)
 from data import data, texts
 from handler import handle
 from matrix_actions import matrix
@@ -52,7 +52,7 @@ def upload():
 		nextcloud.upload_file(f"/videot-infot/{filename}", f"static/uploads/{filename}")
 		nextcloud.upload_file(f"/videot-infot/{filename}_info.txt", f"{filename}.txt")
 		link_info = nextcloud.share_link(f"/videot-infot/{filename}")
-		matrix.send_message(config.room_id, texts.new_video(link_info))
+		matrix.send_message(ROOM_ID, texts.new_video(link_info))
 		return render_template(f'all/uploaded.html', language=get_language(request))
 	else: # Jos käyttäjänimen validointi epäonnistuu
 		return 'invalid element username'
@@ -89,7 +89,7 @@ def onetime_verify1():
 	f = open(f"{securate(element)}_otp.txt", "r")
 	totp = f.read() # Lue TOTP koodi tiedostosta
 	f.close()
-	tot1 = pyotp.TOTP(config.admin_2fa)
+	tot1 = pyotp.TOTP(ADMIN_2FA)
 	if otp == totp:
 		f = open(f"{securate(element)}_otp.txt", "w")
 		f.write("") # Poista TOTP koodi

@@ -1,24 +1,31 @@
 from flask import Flask
 import os
-from config import config
+from config import (
+    TEST_MAIN_DOMAIN, 
+    TEST_MAIN1_DOMAIN, 
+    MAIN_DOMAIN, 
+    MAIN1_DOMAIN, 
+    TESTMODE_TRUE,
+    MAINTANENCE_TRUE,
+    TESTMODE_TRUE,
+    SSL
+)
 def create_app():
-    if config.testmode_true == True:
-        MAIN_DOMAIN = config.TEST_MAIN_DOMAIN
-        MAIN1_DOMAIN = config.TEST_MAIN1_DOMAIN
+    if TESTMODE_TRUE == True:
+        APP_DOMAIN = TEST_MAIN_DOMAIN
+        APP1_DOMAIN = TEST_MAIN1_DOMAIN
     else:
-        MAIN_DOMAIN = config.MAIN_DOMAIN
-        MAIN1_DOMAIN = config.MAIN1_DOMAIN
-    app = Flask(__name__, host_matching=True, static_host=MAIN_DOMAIN)
-    @app.before_first_request
-    def before_first():
-        response = requests.get("https://uptimerobot.com/inc/files/ips/IPv4.txt")
-        uptimerobot_ips = response.content
-        app.logger.debug('Getting uptimerobot ips')
+        APP_DOMAIN = MAIN_DOMAIN
+        APP1_DOMAIN = MAIN1_DOMAIN
+    response = requests.get("https://uptimerobot.com/inc/files/ips/IPv4.txt")
+    UPTIMEROBOT_IPS = response.content
+    app.logger.debug('Getting uptimerobot ips')
+    app = Flask(__name__, host_matching=True, static_host=APP_DOMAIN)
     @app.before_request # Suoritetaan aina ennen pyyntöön vastaamista
     def before():
         handle.debug(request)
-        if config.testmode_true == True or config.maintanence_true == True:
-            if request.remote_addr in uptimerobot_ips or request.remote_addr in config.testmode_ips or request.remote_addr in config.maintanence_ips:
+        if TESTMODE_TRUE == True or MAINTANENCE_TRUE == True:
+            if request.remote_addr in UPTIMEROBOT_IPS or request.remote_addr in TESTMODE_IPS or request.remote_addr in MAINTANENCE_IPS:
                 app.logger.info("Letted user in, because user is from us or uptimerobot")
             else:
                 abort(503)
@@ -41,6 +48,6 @@ def run_app():
     app = create_app()
     if __name__ == '__main__':
         if config.testmode_true == True:
-            app.run(host=TEST_MAIN_DOMAIN, port=443, debug=True, threaded=True,ssl_context=config.ssl)
+            app.run(host=TEST_MAIN_DOMAIN, port=443, debug=True, threaded=True,ssl_context=SSL)
         else:
-            app.run(host=MAIN_DOMAIN, port=443, debug=False, threaded=True,ssl_context=config.ssl)
+            app.run(host=MAIN_DOMAIN, port=443, debug=False, threaded=True,ssl_context=SSL)

@@ -4,16 +4,19 @@ import nextcloud_client
 from api import MatrixHttpApi
 from functools import partial
 from matrix_actions import matrix
-from config import config
-JOIN_DOMAIN = config.JOIN_DOMAIN
-cloud_adress = config.cloud_location
+from config import (
+    JOIN_DOMAIN, 
+    CLOUD_LOCATION, 
+    MATRIX_SERVER, 
+    MATRIX_TOKEN)
+cloud_adress = CLOUD_LOCATION
 def get_language(request):
 	if 'language' in request.cookies:
 		language = request.cookies.get("language")
 		return language
 	else:
 		return "EN"
-from db import
+from db import db
 import pickle
 import hashlib
 id = Blueprint('id', __name__)
@@ -120,7 +123,7 @@ def verification():
         return resp
     else:
         return "ERORR"
-matrix_account = MatrixHttpApi(config.matrix_server, token=config.matrix_token)
+matrix_account = MatrixHttpApi(MATRIX_SERVER, token=MATRIX_TOKEN)
 def create_room(element):
     room = MatrixHttpApi.create_room(matrix_account, False, [element])
     room_id = str(room).replace("{'room_id': '", "")

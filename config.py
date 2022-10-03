@@ -1,33 +1,48 @@
 from yaml1 import *
-class config():
-    room_id = website.notification_room
-    rooms = website.wg
-    MAIN_DOMAIN = website.main_domain
-    MAIN1_DOMAIN = website.second_domain
-    SECOND_DOMAIN = website.register_domain
-    JOIN_DOMAIN = website.joining_domain
-    matrix_token = matrix.access_token
-    matrix_server = matrix.url
-    debug_room = debugger.room_id
-    upload_path = website.upload_path
-    db = website.db
-    cloud_location = nextcloud.url
-    nextcloud_username = nextcloud.username
-    nextcloud_password = nextcloud.password
-    admin_2fa = website.admin_2fa
-    create_secret = website.account_creating_secret
-    ssl = (website.pubkey, website.privkey)
-    verification_room_name = website.admin_2fa
-    create_account_auth_token = website.account_creating_token
-    create_account_server_url = website.account_creating_server
-    create_account_server_ending = website.account_creating_ending
-    testmode = debugger.testmode
-    testmode_true = testmode.testmode_true
-    testmode_ips = testmode.testmode_ips
-    maintanence = debugger.maintanence
-    maintanence_true = maintanence.maintanence_true
-    maintanence_ips = maintanence.maintanence_ips
-    TEST_MAIN_DOMAIN = testmode.test_main_domain
-    TEST_MAIN1_DOMAIN = testmode.test_second_domain
-    TEST_SECOND_DOMAIN = testmode.test_register_domain
-    TEST_JOIN_DOMAIN = testmode.test_join_domain
+
+
+# WEBSITE
+UPLOAD_PATH = website.upload_path
+DB = website.db
+SSL = (website.pubkey, website.privkey)
+
+# MATRIX
+MATRIX_TOKEN = matrix.access_token
+MATRIX_SERVER = matrix.url
+
+CREATE_ACCOUNT_AUTH_TOKEN = website.account_creating_token
+CREATE_ACCOUNT_SERVER_URL = website.account_creating_server
+CREATE_ACCOUNT_SERVER_ENDING = website.account_creating_ending
+CREATE_SECRET = website.account_creating_secret
+
+# ROOMS
+ROOM_ID = website.notification_room
+ROOMS = website.wg
+DEBUG_ROOM = debugger.room_id
+
+# 2FA
+VERIFICATION_ROOM_NAME = website.admin_2fa
+ADMIN_2FA = website.admin_2fa
+
+# NEXTCLOUD
+NEXTCLOUD_USERNAME = nextcloud.username
+NEXTCLOUD_PASSWORD = nextcloud.password
+NEXTCLOUD_URL = nextcloud.url
+CLOUD_LOCATION = NEXTCLOUD_URL
+# MAINTANENCE & TESTMODE
+TESTMODE = debugger.testmode
+MAINTANENCE = debugger.maintanence
+TESTMODE_TRUE = testmode.testmode_true
+MAINTANENCE_TRUE = debugger.maintanence_true
+TESTMODE_IPS = testmode.testmode_ips
+MAINTANENCE_IPS = debugger.maintanence_ips
+
+# DOMAINS
+MAIN_DOMAIN = website.main_domain
+TEST_MAIN_DOMAIN = testmode.test_main_domain
+MAIN1_DOMAIN = website.second_domain
+TEST_MAIN1_DOMAIN = testmode.test_second_domain
+SECOND_DOMAIN = website.register_domain
+TEST_SECOND_DOMAIN = testmode.test_register_domain
+TEST_JOIN_DOMAIN = testmode.test_join_domain
+JOIN_DOMAIN = website.joining_domain

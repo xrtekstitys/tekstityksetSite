@@ -1,8 +1,8 @@
 import nextcloud_client
-from config import config
+from config import (CLOUD_LOCATION, NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD)
 class nextcloud():
-    nc = nextcloud_client.Client(config.cloud_location)
-    nc.login(config.nextcloud_username, config.nextcloud_password)
+    nc = nextcloud_client.Client(CLOUD_LOCATION)
+    nc.login(NEXTCLOUD_USERNAME, NEXTCLOUD_PASSWORD)
     def upload_file(save_path, server_path):
         nextcloud.nc.put_file(save_path, server_path)
         return "OK"
