@@ -4,7 +4,7 @@ flask==1.0
 werkzeug==0.15.3
 json==0.1
 warnings==0.1
-requests==0.1
+requests==2.20.0
 time==0.1
 matrix_client==0.1
 urllib3==0.1
