@@ -9,7 +9,7 @@ time==0.1
 matrix_client==0.1
 urllib3==1.26.5
 os==0.1
-hashlib==0.1
+hashlib==20081119
 pickle==0.1
 nextcloud_client==0.1
 yaml==0.1
