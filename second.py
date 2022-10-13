@@ -8,9 +8,7 @@ from flask import (
     request,
     abort,
 )
-from config import config # TODO #24 FIX THE IMPORTS
-
-SECOND_DOMAIN = config.SECOND_DOMAIN
+from config import (SECOND_DOMAIN)
 second = Blueprint("second", __name__)
 second_route = partial(second.route, host=SECOND_DOMAIN)
 

@@ -12,7 +12,12 @@ from flask import (
 from auth import auth
 from werkzeug.utils import secure_filename
 from transfer_data import transfer
-from config import ROOM_ID, ADMIN_2FA
+from config import (
+    ROOM_ID,
+    ADMIN_2FA,
+    MAIN_DOMAIN, 
+    MAIN1_DOMAIN
+    )
 from data import data, texts
 from handler import handle
 from matrix_actions import matrix
