@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import yaml
 class config():
     with open('./config.yaml') as f:
@@ -9,11 +7,22 @@ class config():
             matrix = doc["Matrix"]
             nextcloud = doc["Nextcloud"]
             website = doc["Website"]
+
 class debugger():
     debuggeri = config.debugger
     matrix = debuggeri['Matrix']
     enabled = matrix['Enabled']
     room_id = matrix['Room_id']
+    testmode = debuggeri["Testmode"]
+    testmode_true = testmode["Enabled"]
+    testmode_ips = testmode["Allowed_ip_list"]
+    test_main_domain = testmode["Main_domain"]
+    test_second_domain = testmode["Second_domain"]
+    test_register_domain = testmode["Register_domain"]
+    test_joining_domain = testmode["Joining_domain"]
+    maintanence = debuggeri["Maintanence"]
+    maintanence_true = maintanence["Enabled"]
+    maintanence_ips = maintanence["Allowed_ip_list"]
 class matrix():
     matrixi = config.matrix
     server = matrixi["Server"]
