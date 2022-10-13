@@ -1,6 +1,6 @@
 functools
 pyotp
-flask==0.0.1
+flask==1.0
 werkzeug
 json
 warnings
