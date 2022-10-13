@@ -1,41 +1,41 @@
-from yaml1 import *
+from parse_config import *
 
 
 # WEBSITE
-UPLOAD_PATH = website.upload_path
-DB = website.db
-SSL = (website.pubkey, website.privkey)
+UPLOAD_PATH = upload_path
+DB = db
+SSL = (pubkey, privkey)
 
 # MATRIX
-MATRIX_TOKEN = matrix.access_token
-MATRIX_SERVER = matrix.url
+MATRIX_TOKEN = access_token
+MATRIX_SERVER = matrix_url
 
-CREATE_ACCOUNT_AUTH_TOKEN = website.account_creating_token
-CREATE_ACCOUNT_SERVER_URL = website.account_creating_server
-CREATE_ACCOUNT_SERVER_ENDING = website.account_creating_ending
-CREATE_SECRET = website.account_creating_secret
+CREATE_ACCOUNT_AUTH_TOKEN = account_creating_token
+CREATE_ACCOUNT_SERVER_URL = account_creating_server
+CREATE_ACCOUNT_SERVER_ENDING = account_creating_ending
+CREATE_SECRET = account_creating_secret
 
 # ROOMS
-ROOM_ID = website.notification_room
-ROOMS = website.wg
-DEBUG_ROOM = debugger.room_id
+ROOM_ID = notification_room
+ROOMS = wg
+DEBUG_ROOM = debugger_room_id
 
 # 2FA
-VERIFICATION_ROOM_NAME = website.admin_2fa
-ADMIN_2FA = website.admin_2fa
+VERIFICATION_ROOM_NAME = fa_room_name
+ADMIN_2FA = admin_2fa
 
 # NEXTCLOUD
-NEXTCLOUD_USERNAME = nextcloud.username
-NEXTCLOUD_PASSWORD = nextcloud.password
-NEXTCLOUD_URL = nextcloud.url
+NEXTCLOUD_USERNAME = nextcloud_username
+NEXTCLOUD_PASSWORD = nextcloud_password
+NEXTCLOUD_URL = nextcloud_url
 CLOUD_LOCATION = NEXTCLOUD_URL
 
 # MAINTANENCE & TESTMODE
-MAINTANENCE_TRUE = debugger.maintanence_true
-MAINTANENCE_IPS = debugger.maintanence_ips
+MAINTANENCE_TRUE = maintanence_true
+MAINTANENCE_IPS = maintanence_ips
 
 # DOMAINS
-MAIN_DOMAIN = website.main_domain
-MAIN1_DOMAIN = website.second_domain
-SECOND_DOMAIN = website.register_domain
-JOIN_DOMAIN = website.joining_domain
+MAIN_DOMAIN = main_domain
+MAIN1_DOMAIN = second_domain
+SECOND_DOMAIN = register_domain
+JOIN_DOMAIN = joining_domain
