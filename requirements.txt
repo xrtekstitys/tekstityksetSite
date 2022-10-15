@@ -1,5 +1,5 @@
 functools==0.5
-pyotp==0.1
+pyotp==2.7.0
 flask==2.2.2
 werkzeug==0.15.3
 json==0.1
