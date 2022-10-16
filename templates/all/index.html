@@ -2,7 +2,7 @@
 {% block content %}
 {% if language == "FI" %}
 <h1>Lataa video saadaksesi tekstitykset siihen</h1>
-<form method="post" action="/fi" enctype="multipart/form-data">
+<form method="post" action="/" enctype="multipart/form-data">
 <dl>
     <p>
         <input type="file" name="file" class="button" autocomplete="off" required>
@@ -25,7 +25,7 @@
 {% endif %}
 {% if language == "SE" %}
 <h1>Ladda upp en video för att få undertexter till den</h1>
-<form method="post" action="/se" enctype="multipart/form-data">
+<form method="post" action="/" enctype="multipart/form-data">
     <dl>
 		<p>
 			<input type="file" name="file" class="button" autocomplete="off" required>
@@ -48,7 +48,7 @@
 {% endif %}
 {% if language == "EN" %}
 <h1>Upload a video to get subtitles for it</h1>
-<form method="post" action="/en" enctype="multipart/form-data">
+<form method="post" action="/" enctype="multipart/form-data">
     <dl>
 		<p>
 			<input type="file" name="file" class="button" autocomplete="off" required>

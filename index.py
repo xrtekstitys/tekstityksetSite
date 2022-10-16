@@ -23,6 +23,7 @@ from handler import handle
 from matrix_actions import matrix
 from nextcloud import nextcloud
 
+
 app1 = Blueprint("app1", __name__)
 app2 = Blueprint("app2", __name__)
 

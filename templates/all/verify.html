@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% if language == "FI" %}
-<form method="post" action="/verify_final/fi/" enctype="multipart/form-data">
+<form method="post" action="/verify_final/" enctype="multipart/form-data">
     <dl>
 		<p>
 			<label for="totp_send">Varmennus koodi</label>
@@ -17,7 +17,7 @@
 </form>
 {% endif %}
 {% if language == "SE" %}
-<form method="post" action="/verify_final/se/" enctype="multipart/form-data">
+<form method="post" action="/verify_final/" enctype="multipart/form-data">
     <dl>
 		<p>
 			<label for="totp_send">Verifieringskod</label>
@@ -31,7 +31,7 @@
 </form>
 {% endif %}
 {% if language == "EN" %}
-<form method="post" action="/verify_final/en/" enctype="multipart/form-data">
+<form method="post" action="/verify_final/" enctype="multipart/form-data">
     <dl>
 		<p>
 			<label for="totp_send">Verify code</label>

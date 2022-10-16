@@ -2,7 +2,7 @@
 {% block content %}
 {% if language == "FI" %}
 <h1>Syötä matrix / element käyttäjänimi, että voimme lähettää sinulle varmennuskoodin.</h1>
-<form method="post" action="/verify/fi/" enctype="multipart/form-data">
+<form method="post" action="/verify/" enctype="multipart/form-data">
     <dl>
 		<p>
 			<input type="text" class="input is-large" id="element" name="element" placeholder="Element käyttäjänimi" required>			
@@ -16,7 +16,7 @@
 {% endif %}
 {% if language == "SE" %}
 <h1>Enter your matrix / element username so we can send you 2FA code.</h1>
-<form method="post" action="/verify/se/" enctype="multipart/form-data">
+<form method="post" action="/verify/" enctype="multipart/form-data">
     <dl>
 		<p>
 			<input type="text" class="entry" id="element" name="element" placeholder="Element käyttäjänimi" required>			
@@ -31,7 +31,7 @@
 {% endif %}
 {% if language == "EN" %}
 <h1>Enter your matrix / element username so we can send you 2FA code.</h1>
-<form method="post" action="/verify/en/" enctype="multipart/form-data">
+<form method="post" action="/verify/" enctype="multipart/form-data">
     <dl>
 		<p>
 			<input type="text" class="entry" id="element" name="element" placeholder="Element käyttäjänimi" required>			
