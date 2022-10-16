@@ -72,9 +72,6 @@ db = paths["DB"]
 # Admin things
 admin_2fa = admin["2FA"]
 
-
-
-
 # SSL
 privkey = SSL['privkey']
 pubkey = SSL['pubkey']
