@@ -3,9 +3,6 @@ from config import (
     MATRIX_SERVER,
     MATRIX_TOKEN,
     ROOMS,
-    CREATE_ACCOUNT_SERVER_URL,
-    CREATE_ACCOUNT_SERVER_ENDING,
-    CREATE_ACCOUNT_AUTH_TOKEN,
 )
 import requests
 import json
@@ -37,23 +34,3 @@ class matrix:
         rooms = config.rooms
         for room in rooms:
             matrix.invite_user(room, element)
-
-    def create_user(request):
-        username = request.form.get("username")
-        password = request.form.get("password")
-        url = f"{CREATE_ACCOUNT_SERVER_URL}/_synapse/admin/v2/users/@{username}:{CREATE_ACCOUNT_SERVER_ENDING}"
-        payload = json.dumps(
-            {
-                "password": f"{password}",
-                "admin": False,
-                "deactivated": False,
-                "user_type": None,
-            }
-        )
-        headers = {
-            "Authorization": f"Bearer {CREATE_ACCOUNT_AUTH_TOKEN}",
-            "Content-Type": "application/json",
-        }
-
-        requests.request("PUT", url, headers=headers, data=payload)
-        return "OK"

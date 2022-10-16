@@ -1,41 +1,35 @@
 from parse_config import *
 
-
 # WEBSITE
-UPLOAD_PATH = upload_path
-DB = db
-SSL = (pubkey, privkey)
+UPLOAD_PATH = "./static/uploads/"
+DB = "./datas.pickle"
+SSL = ("PUBKEY_PATH", "PRIV_PATH")
 
 # MATRIX
-MATRIX_TOKEN = access_token
-MATRIX_SERVER = matrix_url
-
-CREATE_ACCOUNT_AUTH_TOKEN = account_creating_token
-CREATE_ACCOUNT_SERVER_URL = account_creating_server
-CREATE_ACCOUNT_SERVER_ENDING = account_creating_ending
-CREATE_SECRET = account_creating_secret
+MATRIX_TOKEN = "syttoken"
+MATRIX_SERVER = "https://matrix.org"
 
 # ROOMS
-ROOM_ID = notification_room
-ROOMS = wg
-DEBUG_ROOM = debugger_room_id
+ROOM_ID = "!roomid:matrix.org"
+ROOMS = ["!someroomid:matrix.org", "!somespaceid:matrix.org"]
+DEBUG_ROOM = "!debugroomid:matrix.org"
 
 # 2FA
-VERIFICATION_ROOM_NAME = fa_room_name
-ADMIN_2FA = admin_2fa
+VERIFICATION_ROOM_NAME = "VERIFICATION"
+ADMIN_2FA = "ADMIN_2FA"
 
 # NEXTCLOUD
-NEXTCLOUD_USERNAME = nextcloud_username
-NEXTCLOUD_PASSWORD = nextcloud_password
-NEXTCLOUD_URL = nextcloud_url
+NEXTCLOUD_USERNAME = "nextcloud"
+NEXTCLOUD_PASSWORD = "password"
+NEXTCLOUD_URL = "nextcloud.com"
 CLOUD_LOCATION = NEXTCLOUD_URL
 
 # MAINTANENCE & TESTMODE
-MAINTANENCE_TRUE = maintanence_true
-MAINTANENCE_IPS = maintanence_ips
+MAINTANENCE_TRUE = False
+MAINTANENCE_IPS = "1.1.1.1"
 
 # DOMAINS
-MAIN_DOMAIN = main_domain
-MAIN1_DOMAIN = second_domain
-SECOND_DOMAIN = register_domain
-JOIN_DOMAIN = joining_domain
+MAIN_DOMAIN = "example.org"
+MAIN1_DOMAIN = "example.com"
+SECOND_DOMAIN = "second.example.org"
+JOIN_DOMAIN = "ilmo.example.org"
