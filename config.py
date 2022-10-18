@@ -8,6 +8,9 @@ SSL = ("PUBKEY_PATH", "PRIV_PATH")
 # MATRIX
 MATRIX_TOKEN = "syttoken"
 MATRIX_SERVER = "https://matrix.org"
+MATRIX_URL = MATRIX_SERVER
+MATRIX_USERNAME = "username"
+MATRIX_API_VERSION = "v3"
 
 # ROOMS
 ROOM_ID = "!roomid:matrix.org"
