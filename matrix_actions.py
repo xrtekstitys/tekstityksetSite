@@ -1,4 +1,3 @@
-from api import MatrixHttpApi
 from config import (
     MATRIX_SERVER,
     MATRIX_TOKEN,
