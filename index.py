@@ -37,7 +37,7 @@ def get_language(request):
         language = request.cookies.get("language")
         return language
     else:
-        return "EN"
+        return redirect("/select_language/")
 
 
 @app1.route("/select_language/", methods=["GET", "POST"], host=MAIN1_DOMAIN)
@@ -56,9 +56,7 @@ def select_language():  # Toiminto on kielen valitsemista varten
 @app1.route("/", host=MAIN1_DOMAIN)
 @app2.route("/", host=MAIN_DOMAIN)
 def main():
-    if auth.check_auth(
-        request
-    ):  # Jos käyttäjä on jo varmennettu aiemmin, ohjaa suoraan videon lataamiseen
+    if auth.check_auth(request):  # Jos käyttäjä on jo varmennettu aiemmin, ohjaa suoraan videon lataamiseen
         return render_template("all/index.html", language=get_language(request))
     else:
         return render_template("all/verify_1.html", language=get_language(request))
