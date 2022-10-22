@@ -42,8 +42,8 @@ def get_language(request):
 
 @app1.route("/select_language/", methods=["GET", "POST"], host=MAIN1_DOMAIN)
 @app2.route("/select_language/", methods=["GET", "POST"], host=MAIN_DOMAIN)
-def select_language():  # Toiminto on kielen valitsemista varten
-    if request.method == "GET":  # Jos pyyntö on HTTP GET pyyntö
+def select_language():
+    if request.method == "GET":
         return render_template("all/select.html")  # Renderöi all/select.html
     else:  # Jos pyyntö ei ole HTTP GET pyyntö
         resp = make_response(
