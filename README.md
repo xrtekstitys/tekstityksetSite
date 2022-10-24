@@ -8,6 +8,9 @@ wget https://github.com/botsarethefuture/tekstityksetSite/archive/refs/heads/mai
 unzip tekstityksetSite-main.zip
 cd tekstityksetSite-main/tekstityksetSite-main
 pip install -r requirements.txt
-nano config.py
+```
+## Käyttö
+Muuta asetukset config.py tiedostoon, sen jälkeen voit suorittaa ohjelman seuraavasti:
+```shell
 python __init__.py
 ```
