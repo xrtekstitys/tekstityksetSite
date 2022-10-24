@@ -2,7 +2,7 @@
 Tämä repository sisältää Tekstitykset työryhmän nettisivun koodin
 
 ## Asennus
-```scala
-kisa
+```shell
+gh repo clone botsarethefuture/tekstityksetSite
 kissa
 ```
