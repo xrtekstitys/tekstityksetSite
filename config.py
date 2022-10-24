@@ -34,5 +34,5 @@ MAINTANENCE_IPS = "1.1.1.1"
 # DOMAINS
 MAIN_DOMAIN = "example.org"
 MAIN1_DOMAIN = "example.com"
-SECOND_DOMAIN = "second.example.org"
-JOIN_DOMAIN = "ilmo.example.org"
+SECOND_DOMAIN = "ilmo.example.org"
+JOIN_DOMAIN = "id.example.org"

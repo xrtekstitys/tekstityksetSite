@@ -14,7 +14,7 @@ import pickle
 import hashlib
 
 id = Blueprint("id", __name__)
-id_route = partial(id.route, host="")
+id_route = partial(id.route, host=JOIN_DOMAIN)
 
 
 def get_language(request):

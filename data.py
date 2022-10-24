@@ -18,11 +18,11 @@ class data:
                 if element_hash in matrix_map:
                     room_id = matrix_map[element_hash]
                     data = f"{request.remote_addr} with element {element} do have room for verification messages so creating one"
-                    handle.extra_debug(data)
+                    
                     return room_id
                 else:
                     data = f"{request.remote_addr} with element {element} do not have room for verification messages yet so creating one"
-                    handle.extra_debug(data)
+                    
                     room_id = matrix.create_room(element)
                     matrix_map[element_hash] = room_id
                     with open(DB, "bw") as file:
