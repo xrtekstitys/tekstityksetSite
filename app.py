@@ -15,7 +15,6 @@ def create_app():
     app = Flask(__name__, host_matching=True, static_host=APP_DOMAIN)
     @app.before_request # Suoritetaan aina ennen pyyntöön vastaamista
     def before():
-        
         if MAINTANENCE_TRUE == True:
             if request.remote_addr in UPTIMEROBOT_IPS or request.remote_addr in MAINTANENCE_IPS:
                 app.logger.info("Letted user in, because user is from us or uptimerobot")
@@ -39,4 +38,4 @@ def create_app():
 def run_app():
     app = create_app()
     if __name__ == '__main__':
-        app.run(host=MAIN_DOMAIN, port=443, debug=False, threaded=True,ssl_context=SSL)
+        return app.run(host=MAIN_DOMAIN, port=443, debug=False, threaded=True,ssl_context=SSL)
