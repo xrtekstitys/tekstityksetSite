@@ -9,6 +9,7 @@ from flask import (
     abort,
 )
 from config import (SECOND_DOMAIN)
+from functools import partial
 second = Blueprint("second", __name__)
 second_route = partial(second.route, host=SECOND_DOMAIN)
 
