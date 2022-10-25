@@ -2,7 +2,6 @@ import flask
 from flask import make_response, render_template, redirect, request, Blueprint
 import nextcloud_client
 import pyotp
-from api import MatrixHttpApi
 from functools import partial
 from matrix_actions import matrix
 from config import JOIN_DOMAIN, CLOUD_LOCATION, MATRIX_SERVER, MATRIX_TOKEN
@@ -152,15 +151,9 @@ def verification():
         return "ERORR"
 
 
-matrix_account = MatrixHttpApi(MATRIX_SERVER, token=MATRIX_TOKEN)
-
-
 def create_room(element):
-    room = MatrixHttpApi.create_room(matrix_account, False, [element])
-    room_id = str(room).replace("{'room_id': '", "")
-    room_id = str(room_id).replace("'}", "")
-    print(room)
-    return room_id
+
+    return matrix.create_room(element)
 
 
 def send_verification_message(room_id, element):
@@ -174,7 +167,7 @@ def send_verification_message(room_id, element):
 
 
 def send_message(room_id, message):
-    MatrixHttpApi.send_message(matrix_account, room_id, message)
+    matrix.send_message(room_id, message)
     return "OK"
 
 

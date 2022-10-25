@@ -1,7 +1,7 @@
 import os
 import hashlib
 from re import DEBUG
-from handler import handle
+
 from config import DB, UPLOAD_PATH
 from matrix_actions import matrix
 import pickle
