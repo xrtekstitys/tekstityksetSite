@@ -19,7 +19,7 @@ from config import (
     MAIN1_DOMAIN
     )
 from data import data, texts
-from handler import handle
+
 from matrix_actions import matrix
 from nextcloud import nextcloud
 

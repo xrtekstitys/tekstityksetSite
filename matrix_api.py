@@ -46,8 +46,6 @@ def invite_user(user, roomid):
     response = request("POST", F"rooms/{roomid}/invite", payload=payload)
 
 def send_message(roomid, message):
-    url = f"{MATRIX_URL}/_matrix/client/r0/rooms/{roomid}/send/m.room.message"
-
     payload = json.dumps({
     "msgtype": "m.text",
     "body": message,
@@ -58,5 +56,5 @@ def send_message(roomid, message):
     'Content-Type': 'application/json'
     }
 
-    request("POST", url, payload=payload)
+    request("POST", f"rooms/{roomid}/send/m.room.message", payload=payload)
 
