@@ -17,7 +17,7 @@ mypy_extensions==0.4.3
 numpy==1.23.4
 ordereddict==1.1
 PasteScript==3.2.1
-protobuf==4.21.8
+protobuf==4.21.9
 pyOpenSSL==22.1.0
 python-dotenv==0.21.0
 PyYAML==6.0
