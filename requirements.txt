@@ -8,7 +8,7 @@ cryptography==38.0.1
 Cython==0.29.32
 dl==0.1.0
 eventlet==0.33.1
-gevent==22.10.1
+gevent==22.10.2
 greenlet==2.0.0
 inotify==0.2.10
 ipaddr==2.2.0
