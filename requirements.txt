@@ -7,7 +7,7 @@ colorama==0.4.6
 cryptography==38.0.3
 Cython==0.29.32
 dl==0.1.0
-eventlet==0.33.1
+eventlet==0.33.2
 gevent==22.10.2
 greenlet==2.0.1
 inotify==0.2.10
