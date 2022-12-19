@@ -12,7 +12,7 @@ gevent==22.10.2
 greenlet==2.0.1
 inotify==0.2.10
 ipaddr==2.2.0
-keyring==23.11.0
+keyring==23.13.1
 mypy_extensions==0.4.3
 numpy==1.23.5
 ordereddict==1.1
