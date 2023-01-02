@@ -28,5 +28,5 @@ typing_extensions==4.4.0
 unicodedata2==15.0.0
 unittest_data_provider==1.0.1
 urllib3_secure_extra==0.1.0
-watchdog==2.1.9
+watchdog==2.2.1
 wincertstore==0.2.1
