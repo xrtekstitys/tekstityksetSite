@@ -1,5 +1,5 @@
-from otp import is_otp_right, create_otp
 import hashlib
+from otp import is_otp_right, create_otp
 import db
 import flask
 from flask import make_response, render_template, redirect, request, Blueprint, abort
@@ -66,7 +66,7 @@ def register():
 @id_route("/register/", methods=["POST"])
 def hook():
     element = flask.request.form.get("loginname")
-    id = create_room(element)
+    id = create_room(element) 
     send_verification_message(id, element)
     passw = flask.request.form.get("password")
     response = make_response(
