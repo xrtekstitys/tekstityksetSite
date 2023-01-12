@@ -1,17 +1,14 @@
+from otp import is_otp_right, create_otp
+import hashlib
+import db
 import flask
 from flask import make_response, render_template, redirect, request, Blueprint, abort
-import nextcloud_client
-import pyotp
 from functools import partial
 from matrix_actions import matrix
-from config import JOIN_DOMAIN, CLOUD_LOCATION, MATRIX_SERVER, MATRIX_TOKEN
+from config import JOIN_DOMAIN, CLOUD_LOCATION
 
 cloud_adress = CLOUD_LOCATION
 
-from db import db
-import pickle
-import hashlib
-from otp import is_otp_right, create_otp
 id = Blueprint("id", __name__)
 id_route = partial(id.route, host=JOIN_DOMAIN)
 
@@ -25,7 +22,8 @@ def get_language(request):
 
 
 def hash_cat(cat):
-    hashlib.md5(bytes(cat, "utf-8")).hexdigest()  # TODO #23 Add better encryption
+    # TODO #23 Add better encryption
+    hashlib.md5(bytes(cat, "utf-8")).hexdigest()
     return cat
 
 
