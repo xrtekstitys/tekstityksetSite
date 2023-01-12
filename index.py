@@ -17,7 +17,7 @@ from config import (
     MAIN_DOMAIN,
     MAIN1_DOMAIN
 )
-from data import data, texts
+from data import data, texts, get_room_id
 
 from matrix_actions import matrix
 from nextcloud import nextcloud
@@ -91,7 +91,7 @@ def upload():
 @app2.route("/verify/", methods=["POST"], host=MAIN_DOMAIN)
 def onetime_verify():
     element = request.form.get("element")
-    room_id = data.pickles(request)
+    room_id = get_room_id(element)
     if element.startswith("@"):
         totp = create_otp(element)
     else:
