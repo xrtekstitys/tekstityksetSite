@@ -6,7 +6,7 @@
   <input class="input is-large" type="text" id="code" name="code" placeholder="Koodi jonka vastaanotit elementissä"><br>
   <br>
   <input class="button is-fullwidth is-large" type="submit" value="Submit">
-</form> 
+</form>
 {% endif %}
 {% if language == "SE" %}
 <form action="/verification/" method="post">
@@ -18,10 +18,10 @@
 {% endif %}
 {% if language == "EN" %}
 <form action="/verification/" method="post">
-    <label for="code">Code you received at element:</label><br>
-    <input class="input is-large" type="text" id="code" name="code" placeholder="Code you received at element"><br>
-    <br>
-    <input class="button is-fullwidth is-large" type="submit" value="Submit">
-  </form> 
+  <label for="code">Code you received at element:</label><br>
+  <input class="input is-large" type="text" id="code" name="code" placeholder="Code you received at element"><br>
+  <br>
+  <input class="button is-fullwidth is-large" type="submit" value="Submit">
+</form>
 {% endif %}
 {% endblock %}

@@ -7,14 +7,14 @@
 }
 
 * {
-	font-family: "FucXed", sans-serif;
-	text-transform: uppercase;
+    font-family: "FucXed", sans-serif;
+    text-transform: uppercase;
     text-align: center;
     color: white
 }
-afont {
 
-}
+afont {}
+
 .button {
     background-color: #eb7ac4;
     border: none;
@@ -27,6 +27,7 @@ afont {
     margin: 4px 2px;
     cursor: pointer;
 }
+
 .entry {
     font-family: Arial, Helvetica, sans-serif;
     text-transform: none;
@@ -35,6 +36,7 @@ afont {
     padding: 15px 32px;
     color: black;
 }
+
 body {
     background-color: #c80082;
 }
