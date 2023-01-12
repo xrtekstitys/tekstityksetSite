@@ -1,5 +1,3 @@
-from functools import partial
-import pyotp
 from flask import (
     Blueprint,
     flash,
@@ -11,7 +9,6 @@ from flask import (
 )
 from auth import auth
 from werkzeug.utils import secure_filename
-from transfer_data import transfer
 from config import (
     ROOM_ID,
     MAIN_DOMAIN,

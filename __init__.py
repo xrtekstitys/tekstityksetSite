@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import os
 from config import (
     MAIN_DOMAIN,
@@ -6,7 +6,7 @@ from config import (
     MAINTANENCE_TRUE,
     SSL
 )
-
+import requests
 
 def create_app():
     APP_DOMAIN = MAIN_DOMAIN
@@ -33,7 +33,7 @@ def create_app():
     @app.route("/ping/")
     def ping():
         return 'pong'
-    from . import id
+    from .authentication import id
     from . import second
     from . import index
     app.register_blueprint(second.second)
