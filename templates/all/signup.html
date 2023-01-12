@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% block content %}
 <!doctype html>
@@ -9,17 +8,19 @@
 {% if language == "FI" %}
 <h1>Tee tili</h1>
 <form method="post" action="/register/" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
-			<input type="text" class="input is-large input is-large" id="username" name="loginname" placeholder="Element käyttäjänimi" required>			
+			<input type="text" class="input is-large input is-large" id="username" name="loginname"
+				placeholder="Element käyttäjänimi" required>
 		</p>
 		<br>
-        <p>
-			<input type="text" class="input is-large input is-large"id="password" name="password" placeholder="Salasana" required>			
+		<p>
+			<input type="text" class="input is-large input is-large" id="password" name="password"
+				placeholder="Salasana" required>
 		</p>
-    </dl>
+	</dl>
 	<br>
-    <p>
+	<p>
 		<input type="submit" class="button is-large" value="Lähetä">
 	</p>
 </form>
@@ -27,17 +28,19 @@
 {% if language == "SE" %}
 <h1>Skapa ett konto</h1>
 <form method="post" action="/register/" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
-			<input type="text" class="input is-large input is-large" id="username" name="loginname" placeholder="Element Användarnamn" required>			
+			<input type="text" class="input is-large input is-large" id="username" name="loginname"
+				placeholder="Element Användarnamn" required>
 		</p>
 		<br>
-        <p>
-			<input type="text" class="input is-large input is-large"id="password" name="password" placeholder="Lösenord" required>			
+		<p>
+			<input type="text" class="input is-large input is-large" id="password" name="password"
+				placeholder="Lösenord" required>
 		</p>
-    </dl>
+	</dl>
 	<br>
-    <p>
+	<p>
 		<input type="submit" class="button is-large" value="Skicka">
 	</p>
 </form>
@@ -45,17 +48,19 @@
 {% if language == "EN" %}
 <h1>Create account</h1>
 <form method="post" action="/register/" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
-			<input type="text" class="input is-large input is-large" id="username" name="loginname" placeholder="Element username" required>			
+			<input type="text" class="input is-large input is-large" id="username" name="loginname"
+				placeholder="Element username" required>
 		</p>
 		<br>
-        <p>
-			<input type="text" class="input is-large input is-large"id="password" name="password" placeholder="password" required>			
+		<p>
+			<input type="text" class="input is-large input is-large" id="password" name="password"
+				placeholder="password" required>
 		</p>
-    </dl>
+	</dl>
 	<br>
-    <p>
+	<p>
 		<input type="submit" class="button is-large" value="Send">
 	</p>
 </form>

@@ -3,12 +3,13 @@
 {% if language == "FI" %}
 <h1>Syötä matrix / element käyttäjänimi, että voimme lähettää sinulle varmennuskoodin.</h1>
 <form method="post" action="/verify/" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
-			<input type="text" class="input is-large" id="element" name="element" placeholder="Element käyttäjänimi" required>			
+			<input type="text" class="input is-large" id="element" name="element" placeholder="Element käyttäjänimi"
+				required>
 		</p>
-    </dl>
-    <p>
+	</dl>
+	<p>
 		<input type="submit" class="button is-fullwidth" value="Lähetä">
 	</p>
 </form>
@@ -16,27 +17,29 @@
 {% if language == "SE" %}
 <h1>Enter your matrix / element username so we can send you 2FA code.</h1>
 <form method="post" action="/verify/" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
-			<input type="text" class="input is-large" id="element" name="element" placeholder="Element käyttäjänimi" required>			
+			<input type="text" class="input is-large" id="element" name="element" placeholder="Element käyttäjänimi"
+				required>
 		</p>
 		<p>
 		</p>
-    </dl>
-    <p>
-		<input type="submit" class="button is-fullwidth value="Send">
+	</dl>
+	<p>
+		<input type="submit" class="button is-fullwidth value=" Send">
 	</p>
 </form>
 {% endif %}
 {% if language == "EN" %}
 <h1>Enter your matrix / element username so we can send you 2FA code.</h1>
 <form method="post" action="/verify/" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
-			<input type="text" class="input is-large" id="element" name="element" placeholder="Element käyttäjänimi" required>			
+			<input type="text" class="input is-large" id="element" name="element" placeholder="Element käyttäjänimi"
+				required>
 		</p>
-    </dl>
-    <p>
+	</dl>
+	<p>
 		<input type="submit" class="button is-fullwidth" value="Send">
 	</p>
 </form>

@@ -1,41 +1,44 @@
 import os
 import hashlib
-from re import DEBUG
 
-from config import DB, UPLOAD_PATH
+from config import UPLOAD_PATH
 from matrix_actions import matrix
-import pickle
 from werkzeug.utils import secure_filename
+
+import json
+
+
+def get_rooms():
+    with open("rooms.json", "r") as f:
+        data = json.load(f)
+    return data
+
+
+def get_room_id(username):
+    data = get_rooms()
+    username_hash = get_username_hash(username)
+
+    if username_hash in data:
+        room_id = data[username_hash]
+    else:
+        room_id = matrix.create_room(username)
+        set_room_id(username, room_id)
+    return room_id
+
+
+def get_username_hash(username):
+    username_hash = hashlib.md5(bytes(username, "utf-8")).hexdigest()
+    return username_hash
+
+
+def set_room_id(username, room_id):
+    data = get_rooms()
+    data[get_username_hash(username)] = room_id
+    with open("rooms.json", "w") as f:
+        json.dump(data, f)
 
 
 class data:
-    def pickles(request):
-        element = request.form.get("element")
-        element_hash = hashlib.md5(bytes(element, "utf-8")).hexdigest()
-        if os.path.exists(DB):
-            with open(DB, "br") as file:
-                matrix_map = pickle.load(file)
-                if element_hash in matrix_map:
-                    room_id = matrix_map[element_hash]
-                    data = f"{request.remote_addr} with element {element} do have room for verification messages so creating one"
-                    
-                    return room_id
-                else:
-                    data = f"{request.remote_addr} with element {element} do not have room for verification messages yet so creating one"
-                    
-                    room_id = matrix.create_room(element)
-                    matrix_map[element_hash] = room_id
-                    with open(DB, "bw") as file:
-                        pickle.dump(matrix_map, file)
-                    return room_id
-        else:
-            room_id = matrix.create_room(element)
-            matrix_map = dict()
-            matrix_map[element_hash] = room_id
-            with open(DB, "bw") as file:
-                pickle.dump(matrix_map, file)
-            return room_id
-
     def save_video_info(filename, request):
         element = request.cookies.get("matrix")
         englanti = request.form.get("English")

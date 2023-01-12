@@ -2,44 +2,47 @@
 {% block content %}
 {% if language == "FI" %}
 <form method="post" action="/verify_final/" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
 			<label for="totp_send">Varmennus koodi</label>
 			<br>
-			<input type="text" class="input is-large" id="totp_send" name="totp_send" placeholder="Varmennus koodi" required minlength="6" maxlength="6">		
+			<input type="text" class="input is-large" id="totp_send" name="totp_send" placeholder="Varmennus koodi"
+				required minlength="6" maxlength="6">
 		</p>
-    </dl>
-  <br>
-  <br>
-    <p>
+	</dl>
+	<br>
+	<br>
+	<p>
 		<input type="submit" class="button is-fullwidth" value="Varmenna">
 	</p>
 </form>
 {% endif %}
 {% if language == "SE" %}
 <form method="post" action="/verify_final/" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
 			<label for="totp_send">Verifieringskod</label>
 			<br>
-			<input type="text" class="input is-large" id="totp_send" name="totp_send" placeholder="Verifieringskod" required minlength="6" maxlength="6">		
+			<input type="text" class="input is-large" id="totp_send" name="totp_send" placeholder="Verifieringskod"
+				required minlength="6" maxlength="6">
 		</p>
-    </dl>
-    <p>
+	</dl>
+	<p>
 		<input type="submit" class="button is-fullwidth" value="bekräfta">
 	</p>
 </form>
 {% endif %}
 {% if language == "EN" %}
 <form method="post" action="/verify_final/" enctype="multipart/form-data">
-    <dl>
+	<dl>
 		<p>
 			<label for="totp_send">Verify code</label>
 			<br>
-			<input type="text" class="input is-large" id="totp_send" name="totp_send" placeholder="Verify code" required minlength="6" maxlength="6">		
+			<input type="text" class="input is-large" id="totp_send" name="totp_send" placeholder="Verify code" required
+				minlength="6" maxlength="6">
 		</p>
-    </dl>
-    <p>
+	</dl>
+	<p>
 		<input type="submit" class="button is-fullwidth" value="Verify">
 	</p>
 </form>

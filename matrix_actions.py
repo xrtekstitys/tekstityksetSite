@@ -4,11 +4,12 @@ from config import (
     ROOMS,
 )
 from matrix_api import (
-    get_user_room, 
-    invite_user, 
+    get_user_room,
+    invite_user,
     send_message)
 import requests
 import json
+
 
 class matrix:
     def create_room(element):
