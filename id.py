@@ -1,5 +1,5 @@
 import flask
-from flask import make_response, render_template, redirect, request, Blueprint
+from flask import make_response, render_template, redirect, request, Blueprint, abort
 import nextcloud_client
 import pyotp
 from functools import partial
@@ -11,7 +11,7 @@ cloud_adress = CLOUD_LOCATION
 from db import db
 import pickle
 import hashlib
-
+from otp import is_otp_right, create_otp
 id = Blueprint("id", __name__)
 id_route = partial(id.route, host=JOIN_DOMAIN)
 
@@ -40,20 +40,9 @@ def set_password(username, password):
 def is_password_right(username, password):
     userdata = db.get_user(username)
     if userdata[0] == hash_cat(password):
-        print(userdata)
         return True
     else:
-        print(userdata)
-        print(userdata[0])
         return False
-
-
-def get_works():
-    f = open("works.txt", "r")
-    data = f.read()
-    f.close()
-    data = data.split(";")
-    return data
 
 
 @id_route("/login/")
@@ -82,18 +71,17 @@ def hook():
     id = create_room(element)
     send_verification_message(id, element)
     passw = flask.request.form.get("password")
-    cat = make_response(
+    response = make_response(
         render_template("verification.html", language=get_language(request))
     )
-    cat.set_cookie("pass", hash_cat(passw))
-    cat.set_cookie("username", flask.request.form.get("loginname"))
-    return cat
+    response.set_cookie("pass", hash_cat(passw))
+    response.set_cookie("username", flask.request.form.get("loginname"))
+    return response
 
 
 @id_route("/basic_auth/", methods=["GET", "POST"])
 def basic_auth():
     if request.method == "GET":
-        # print(request.__dict__)
         if "Authorization" in request.headers:
             print(request.headers["Authorization"])
             auth = request.headers["Authorization"]
@@ -118,37 +106,20 @@ def basic_auth():
         return "cat", 200
 
 
-@id_route("/")
-def index():
-    if request.cookies["login"] and not request.cookies.get("login") == "":
-        works = get_works()
-        return render_template("sisa/index.html", works=works)
-    else:
-        return render_template("login.html")
-
-
-@id_route("/ohjeet/")
-def ohje():
-    return render_template("ohjeet.html")
-
-
 @id_route("/verification/", methods=["POST"])
 def verification():
     username = flask.request.cookies.get("username")
     code = flask.request.form.get("code")
-    f = open(f"{username}_otp.txt", "r")
-    data = f.read()
-    f.close()
     username = username.replace("@", "")
     username = username.replace(":elokapina.fi", "")
-    if code == data:
+    if is_otp_right(username, code):
         put_user(username, request.cookies.get("pass"))
         resp = make_response(redirect(cloud_adress))
         resp.delete_cookie("pass")
         resp.delete_cookie("username")
         return resp
     else:
-        return "ERORR"
+        abort(500)
 
 
 def create_room(element):
@@ -157,13 +128,8 @@ def create_room(element):
 
 
 def send_verification_message(room_id, element):
-    secret = pyotp.random_base32()
-    totp = pyotp.TOTP(secret)
-    totp = totp.now()
-    f = open(f"{element}_otp.txt", "w")
-    f.write(totp)
-    f.close()
-    send_message(room_id, f"")
+    totp = create_otp(element)
+    send_message(room_id, f"Your 2fa code is {totp}")
 
 
 def send_message(room_id, message):
