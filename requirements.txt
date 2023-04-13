@@ -13,7 +13,7 @@ Cython==0.29.34
 dl==0.1.0
 eventlet==0.33.2
 gevent==22.10.2
-greenlet==2.0.1
+greenlet==2.0.2
 inotify==0.2.10
 ipaddr==2.2.0
 keyring==23.13.1
